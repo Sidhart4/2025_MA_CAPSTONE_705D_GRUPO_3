@@ -8,7 +8,7 @@ Repositorio de **Capstone 2025** para Ingeniería en Informática.
 - Fase 3: Evidencias del proyecto, grupales e individuales.
 
 👥 **Integrantes del grupo:**
-- Sidharta Olguín
+- Roberto Olguín
 - Álvaro Quiroz
 - Mario Galarce
 

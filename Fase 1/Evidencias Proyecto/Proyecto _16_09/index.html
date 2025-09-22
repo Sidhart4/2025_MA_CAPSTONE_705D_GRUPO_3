@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Akuma no Pet – Agenda tu cita</title>
+    <meta name="description"
+        content="Agenda tu cita veterinaria en 3 clics. Sistema de reservas con recordatorios automáticos por WhatsApp y correo." />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/styles.css">
+</head>
+
+<body>
+    <!-- ============ NAVBAR ============ -->
+    <header>
+        <div class="container nav" id="navbar">
+            <div class="brand">
+                <div class="logo" aria-hidden="true">
+                    <a href="index.html"></a>
+                    <img src="static/images/logo_transparente.png" alt="Logo Akuma no Pet">
+                </div>
+                <a href="#" aria-label="Inicio Akuma no Pet">Akuma no Pet</a>
+            </div>
+
+            <nav class="menu" aria-label="Principal">
+                <a href="index.html">Inicio</a>
+                <a href="agenda/agenda.html">Agenda</a>
+                <a href="productos/productos.html">Productos</a>
+                <a href="#equipo">Equipo</a>
+                <a href="#precios">Precios</a>
+                <a href="#contacto">Contacto</a>
+            </nav>
+
+            <div class="actions">
+                <a href="login/login.html" class="btn-blanco-nav" role="button">Iniciar sesión</a>
+                <a href="agenda/agenda.html" class="btn-morado-nav" role="button">Reservar Cita</a
+                <button class="hamburger" id="btnMenu" aria-label="Abrir menú">
+
+                </button>
+            </div>
+
+            <!-- Panel móvil -->
+            <div class="mobile-panel" id="panelMovil" aria-label="Menú móvil">
+                <a href="#servicios">Servicios</a>
+                <a href="#agenda">Agenda</a>
+                <a href="#equipo">Equipo</a>
+                <a href="#precios">Precios</a>
+                <a href="#contacto">Contacto</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============ HERO ============ -->
+    <main id="contenido" class="hero">
+        <div class="container hero-grid">
+            <!-- Columna izquierda: TEXTO -->
+            <div class="hero-copy">
+                <h1 class="title">Agenda tu cita veterinaria en <span class="accent">3 clics</span></h1>
+                <p class="lead">Atención profesional y cariñosa para tu mascota. Sistema de reservas fácil con
+                    recordatorios automáticos por WhatsApp y correo.</p>
+
+                <div class="cta" role="group" aria-label="Acciones principales">
+                    <a href="" class="btn-morado-banner" id="reservarAhora">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="4" width="18" height="18" rx="2" />
+                            <path d="M16 2v4M8 2v4M3 10h18" />
+                        </svg>
+                        Reservar Ahora
+                    </a>
+                    <a href="" class="btn-blanco-banner btn-text-morado">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M12 6v6l4 2" />
+                        </svg>
+                        Ver Disponibilidad
+                    </a>
+                </div>
+
+                <div class="benefits" aria-label="Beneficios">
+                    <span class="benefit">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 22s8-4 8-10a8 8 0 1 0-16 0c0 6 8 10 8 10z" />
+                        </svg>
+                        <a href="">Citas en 30 min</a>
+                    </span>
+                    <span class="benefit">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                            stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path
+                                d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 1 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z" />
+                        </svg>
+                        Atención personalizada
+                    </span>
+                </div>
+            </div>
+
+            <!-- Columna derecha: IMAGEN -->
+            <div class="media-wrap">
+                <div class="media-frame">
+                    <img src="static/images/banner.jpg"
+                        alt="Veterinaria sonriendo junto a un perro y un gato en la consulta" />
+                </div>
+            </div>
+        </div>
+
+        <!-- ============ DESTACADOS ============ -->
+        <section class="destacados section" id="destacados">
+            <div class="container">
+                <!-- Chips -->
+                <div class="destacados-chips">
+                    <span class="chip chip-purple">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path
+                                d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-4.42 0-8 2.24-8 5v1h16v-1c0-2.76-3.58-5-8-5Z" />
+                        </svg>
+                        +200 mascotas atendidas
+                    </span>
+                    <span class="chip chip-green">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M2 12a10 10 0 1 1 18.25 6.16l1.2 3.93-4-1.27A10 10 0 0 1 2 12Zm6-1h2v5H8Zm6 0h2v5h-2Z" />
+                        </svg>
+                        Recordatorios WhatsApp
+                    </span>
+                    <span class="chip chip-blue">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M20 4H4a2 2 0 0 0-2 2v12l4-3h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4-8 5L4 8V6l8 5 8-5Z" />
+                        </svg>
+                        Recordatorios Correo
+                    </span>
+                    <span class="chip chip-amber">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2 9.5 8H3l5 3.5L5.5 18 12 14l6.5 4-2.5-6.5L21 8h-6.5Z" />
+                        </svg>
+                        5 años de experiencia
+                    </span>
+                </div>
+
+                <!-- Cabecera -->
+                <header class="destacados-head">
+                    <h2>Productos Destacados</h2>
+                    <p>Descubre nuestras ofertas especiales y productos más populares</p>
+                </header>
+
+               <!-- Carrusel -->
+<div class="p-carousel">
+  <button class="p-nav prev" aria-label="Anterior">‹</button>
+
+  <!-- viewport para ocultar overflow y saltar por página -->
+  <div class="p-viewport">
+    <div class="p-track" id="destacadosTrack">
+      <!-- Tarjeta 1 -->
+      <article class="p-card">
+        <div class="p-img">
+          <span class="p-badge new">Nuevo</span>
+          <div class="imgbox">
+            <img src="static/images/productos/automatic-pet-feeder-programmable.jpg" alt="Collar LED Recargable">
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="p-title">Collar LED Recargable</div>
+          <div class="p-desc">Collar luminoso para paseos nocturnos</div>
+          <div class="p-meta">
+            <span class="stars">★★★★☆</span>
+            <div class="p-stock">Sin stock</div>
+          </div>
+          <div class="p-meta">
+            <div><span class="p-price">$25.000</span></div>
+          </div>
+        </div>
+        <div class="p-actions">
+          <button class="p-add" type="button">Agregar</button>
+          <button class="p-ghost" type="button" aria-label="Ver">👁</button>
+          <button class="p-ghost" type="button" aria-label="Favorito">❤</button>
+        </div>
+      </article>
+
+      <!-- Tarjeta 2 -->
+      <article class="p-card">
+        <div class="p-img">
+          <span class="p-badge sale">Oferta</span>
+          <div class="imgbox">
+            <img src="static/images/productos/cat-scratching-tower-120cm-multi-level.jpg" alt="Frontline Plus">
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="p-title">Frontline Plus</div>
+          <div class="p-desc">Pipeta antipulgas y garrapatas</div>
+          <div class="p-meta">
+            <span class="stars">★★★★☆</span>
+            <div class="p-stock"></div>
+          </div>
+          <div class="p-meta">
+            <div>
+              <span class="p-price">$15.000</span>
+              <span class="p-old">$18.000</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-actions">
+          <button class="p-add" type="button">Agregar</button>
+          <button class="p-ghost" type="button" aria-label="Ver">👁</button>
+          <button class="p-ghost" type="button" aria-label="Favorito">❤</button>
+        </div>
+      </article>
+
+      <!-- Tarjeta 3 -->
+      <article class="p-card">
+        <div class="p-img">
+          <span class="p-badge new">Nuevo</span>
+          <div class="imgbox">
+            <img src="static/images/productos/dog-food-bag-royal-canin.jpg" alt="Ratón de Juguete Interactivo">
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="p-title">Ratón de Juguete Interactivo</div>
+          <div class="p-desc">Juguete automático para gatos</div>
+          <div class="p-meta">
+            <span class="stars">★★★★☆</span>
+            <div class="p-stock">Sin stock</div>
+          </div>
+          <div class="p-meta">
+            <div><span class="p-price">$22.000</span></div>
+          </div>
+        </div>
+        <div class="p-actions">
+          <button class="p-add" type="button">Agregar</button>
+          <button class="p-ghost" type="button" aria-label="Ver">👁</button>
+          <button class="p-ghost" type="button" aria-label="Favorito">❤</button>
+        </div>
+      </article>
+
+      <!-- Tarjeta 4 -->
+      <article class="p-card">
+        <div class="p-img">
+          <span class="p-badge sale">Oferta</span>
+          <div class="imgbox">
+            <img src="static/images/productos/frontline-plus-pipeta-antipulgas.jpg" alt="Royal Canin Adult">
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="p-title">Royal Canin Adult</div>
+          <div class="p-desc">Alimento premium para perros adultos</div>
+          <div class="p-meta">
+            <span class="stars">★★★★★</span>
+            <div class="p-stock"></div>
+          </div>
+          <div class="p-meta">
+            <div>
+              <span class="p-price">$45.000</span>
+              <span class="p-old">$50.000</span>
+            </div>
+          </div>
+        </div>
+        <div class="p-actions">
+          <button class="p-add" type="button">Agregar</button>
+          <button class="p-ghost" type="button" aria-label="Ver">👁</button>
+          <button class="p-ghost" type="button" aria-label="Favorito">❤</button>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <button class="p-nav next" aria-label="Siguiente">›</button>
+</div>
+
+<!-- Dots -->
+<div class="p-dots" id="destacadosDots"></div>
+
+         <!-- ================== SERVICIOS ================== -->
+        <section id="servicios" class="services">
+            <div class="container">
+                <header class="services-head">
+                    <h2>Nuestros Servicios</h2>
+                    <p>Atención integral para el bienestar de tu mascota con profesionales especializados</p>
+                </header>
+
+                <div class="srv-grid">
+                    <!-- Card 1 -->
+                    <article class="srv-card" aria-label="Consulta General">
+                        <div class="srv-icon" aria-hidden="true">
+                            <!-- Estetoscopio -->
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4v5a4 4 0 0 0 8 0V4" />
+                                <path d="M8 15a6 6 0 1 0 12 0v-2" />
+                                <circle cx="20" cy="10" r="2" />
+                            </svg>
+                        </div>
+
+                        <h3 class="srv-title">Consulta General</h3>
+                        <p class="srv-desc">Examen completo de salud para tu mascota</p>
+
+                        <div class="srv-price">$25.000</div>
+                        <div class="srv-meta">Duración: 30 minutos</div>
+
+                        <button class="btn btn-primary srv-btn" type="button">Reservar</button>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article class="srv-card" aria-label="Vacunas">
+                        <div class="srv-icon" aria-hidden="true">
+                            <!-- Jeringa -->
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 7l-1 1" />
+                                <path d="M2 22l6-6" />
+                                <path d="M3 21l6-6 6-6a2 2 0 1 1 3 3l-6 6-6 6H3z" />
+                                <path d="M14 6l4 4" />
+                            </svg>
+                        </div>
+
+                        <h3 class="srv-title">Vacunas</h3>
+                        <p class="srv-desc">Plan completo de vacunación preventiva</p>
+
+                        <div class="srv-price">$15.000</div>
+                        <div class="srv-meta">Duración: 15 minutos</div>
+
+                        <button class="btn btn-primary srv-btn" type="button">Reservar</button>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article class="srv-card" aria-label="Control">
+                        <div class="srv-icon" aria-hidden="true">
+                            <!-- Portapapeles con check -->
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="9" y="2" width="6" height="4" rx="1" />
+                                <path d="M9 4H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2" />
+                                <path d="M9 14l2 2 4-4" />
+                            </svg>
+                        </div>
+
+                        <h3 class="srv-title">Control</h3>
+                        <p class="srv-desc">Seguimiento post-tratamiento y controles rutinarios</p>
+
+                        <div class="srv-price">$20.000</div>
+                        <div class="srv-meta">Duración: 20 minutos</div>
+
+                        <button class="btn btn-primary srv-btn" type="button">Reservar</button>
+                    </article>
+                </div>
+            </div>
+        </section>
+        <!-- ================== TESTIMONIOS ================== -->
+        <section id="testimonios" class="testimonials">
+            <div class="container">
+                <header class="t-head">
+                    <h2>Lo que dicen nuestros clientes</h2>
+                    <p>La satisfacción de nuestros pacientes y sus familias es nuestra mayor recompensa</p>
+                </header>
+
+                <div class="t-grid">
+                    <!-- Card 1 -->
+                    <article class="t-card">
+                        <div class="t-stars" aria-label="5 de 5">
+                            <!-- 5 estrellas -->
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </div>
+
+                        <blockquote class="t-quote">
+                            “Excelente atención, muy profesionales y cariñosos con Luna.
+                            El sistema de reservas es súper fácil.”
+                        </blockquote>
+
+                        <div class="t-sep"></div>
+
+                        <div class="t-author">
+                            <div class="t-name">María José Silva</div>
+                            <div class="t-role">Dueña de Luna (Golden Retriever)</div>
+                        </div>
+                    </article>
+
+                    <!-- Card 2 -->
+                    <article class="t-card">
+                        <div class="t-stars" aria-label="5 de 5">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </div>
+
+                        <blockquote class="t-quote">
+                            “Los recordatorios por WhatsApp son geniales.
+                            Nunca más se me olvida una cita de Michi.”
+                        </blockquote>
+
+                        <div class="t-sep"></div>
+
+                        <div class="t-author">
+                            <div class="t-name">Carlos Mendoza</div>
+                            <div class="t-role">Dueño de Michi (Gato Persa)</div>
+                        </div>
+                    </article>
+
+                    <!-- Card 3 -->
+                    <article class="t-card">
+                        <div class="t-stars" aria-label="5 de 5">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.62L12 2 9.19 8.62 2 9.24l5.46 4.73L5.82 21z" />
+                            </svg>
+                        </div>
+
+                        <blockquote class="t-quote">
+                            “El Dr. Camila es increíble, Rocky siempre sale feliz de sus consultas.”
+                        </blockquote>
+
+                        <div class="t-sep"></div>
+
+                        <div class="t-author">
+                            <div class="t-name">Ana Fernández</div>
+                            <div class="t-role">Dueña de Rocky (Bulldog)</div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+        <!-- ============== CTA (Banner) ============== -->
+        <section id="cta" class="cta-gradient">
+            <div class="container cta-inner">
+                <h2>¿Listo para cuidar a tu mascota?</h2>
+                <p>
+                    Agenda tu cita ahora y recibe recordatorios automáticos.
+                    Tu mascota merece la mejor atención profesional.
+                </p>
+
+                <div class="cta-actions">
+                    <a href="#" class="btn-cta btn-cta--white">
+                        <!-- ícono calendario -->
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <rect x="3" y="4" width="18" height="17" rx="3" fill="none" stroke="currentColor"
+                                stroke-width="1.8" />
+                            <path d="M16 2v4M8 2v4M3 10h18" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" />
+                        </svg>
+                        <span>Reservar Cita Ahora</span>
+                    </a>
+
+                    <a href="#" class="btn-cta btn-cta--ghost">
+                        <!-- ícono chat/whatsapp genérico -->
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M21 12a8.5 8.5 0 1 1-3.5-7l2.5 1.8" fill="none" stroke="currentColor"
+                                stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M7.5 20.5 4 22l1-3.6" fill="none" stroke="currentColor" stroke-width="1.8"
+                                stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <span>Contactar por WhatsApp</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <!-- ============== FOOTER ============== -->
+    <footer class="site-footer" id="footer">
+        <div class="container footer-grid">
+            <!-- Marca / descripción -->
+            <section class="footer-brand">
+                <div class="brandline">
+                    <span class="brand-badge" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 21s-7-3.6-7-9a7 7 0 1 1 14 0c0 5.4-7 9-7 9Z" fill="currentColor" />
+                        </svg>
+                    </span>
+                    <strong class="brand-name">Akuma no Pet</strong>
+                </div>
+
+                <p class="footer-lead">
+                    Clínica veterinaria dedicada al cuidado integral de tu mascota.
+                    Atención profesional con el cariño que tu compañero merece.
+                </p>
+
+                <div class="footer-actions">
+                    <a class="fbtn" href="tel:+56912345678" aria-label="Llamar">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M22 16.9v2.3a2 2 0 0 1-2.2 2 19.6 19.6 0 0 1-8.6-3.1 19.3 19.3 0 0 1-6-6A19.6 19.6 0 0 1 2.1 3.6 2 2 0 0 1 4 1.4h2.4a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L7.4 9a16.8 16.8 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 1.8Z"
+                                fill="currentColor" />
+                        </svg>
+                    </a>
+                    <a class="fbtn" href="mailto:hola@akumanopet.cl" aria-label="Enviar correo">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm16 2-8 5-8-5"
+                                fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Contacto -->
+            <section class="footer-col">
+                <h4>Contacto</h4>
+                <ul class="icon-list">
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M22 16.9v2.3a2 2 0 0 1-2.2 2 19.6 19.6 0 0 1-8.6-3.1 19.3 19.3 0 0 1-6-6A19.6 19.6 0 0 1 2.1 3.6 2 2 0 0 1 4 1.4h2.4a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L7.4 9a16.8 16.8 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 1.8Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </span>
+                        <a href="tel:+56912345678">+56 9 1234 5678</a>
+                    </li>
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm16 2-8 5-8-5"
+                                    fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <a href="mailto:hola@akumanopet.cl">hola@akumanopet.cl</a>
+                    </li>
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 22s7-4 7-10a7 7 0 1 0-14 0c0 6 7 10 7 10Z" fill="none"
+                                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        Av. Providencia 1234<br>Providencia, Santiago
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Horarios -->
+            <section class="footer-col">
+                <h4>Horarios</h4>
+                <ul class="icon-list">
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8" />
+                                <path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        Lun - Vie: 9:00 - 18:00
+                    </li>
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8" />
+                                <path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        Sáb: 9:00 - 14:00
+                    </li>
+                    <li>Dom: Cerrado</li>
+                </ul>
+            </section>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>© 2025 Akuma no Pet. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script defer src="static/js/app.js"></script>
+</body>
+
+</html>

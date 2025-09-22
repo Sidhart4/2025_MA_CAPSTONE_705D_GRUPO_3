@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akumano no Pet </title>
+
+    <!-- Tu hoja de estilos existente -->
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <!-- Tipografía Lexend (igual que tu proyecto) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet"/>
+
+    <link rel="icon" href="images/logo_transparente.png" type="image/x-icon">
+  </head>
+  <body>
+    <!-- ===== HEADER (igual a tu estructura) ===== -->
+    <header>
+      <a href="../index.html">
+        <img src="images/logo_transparente.png" alt="Logo" class="logo azul" />
+      </a>
+      <nav>
+        <ul>
+          <li><a href="../index.html">INICIO</a></li>
+          <li><a href="../ventas/ventas.html">VENTAS</a></li>
+          <li><a href="../servicios/servicios.html">SERVICIOS</a></li>
+          <li><a href="../equipo/equipo.html">ESPECIALISTAS</a></li>
+          <li><a href="../reserva/reserva.html">RESERVA</a></li>
+          <li><a href="../contacto/contacto.html">CONTACTO</a></li>
+        </ul>
+      </nav>
+
+      <!-- Botón hamburguesa (offcanvas) -->
+      <div class="open-btn">&#9776;</div>
+
+      <!-- Menú offcanvas -->
+      <div class="offcanvas-nav">
+        <button class="close-btn">&times;</button>
+        <ul>
+          <li><a href="../index.html">INICIO</a></li>
+          <li><a href="../ventas/ventas.html">VENTAS</a></li>
+          <li><a href="../servicios/servicios.html">SERVICIOS</a></li>
+          <li><a href="../equipo/equipo.html">ESPECIALISTAS</a></li>
+          <li><a href="../reserva/reserva.html">RESERVA</a></li>
+          <li><a href="../contacto/contacto.html">CONTACTO</a></li>
+        </ul>
+      </div>
+      <div class="overlay"></div>
+    </header>
+
+    <!-- ===== MIGAS / TÍTULO / CONTROLES SUPERIORES ===== -->
+    <div class="barra-tienda contenedor">
+      <nav class="breadcrumbs">
+
+      </nav>
+
+      <div class="controles">
+        <div class="mostrar">
+          <label for="pageSize">Mostrar:</label>
+          <select id="pageSize">
+            <option value="8">8 por página</option>
+            <option value="12" selected>12 por página</option>
+            <option value="24">24 por página</option>
+          </select>
+        </div>
+
+        <div class="ordenar">
+          <label for="sortBy">Ordenar por:</label>
+          <select id="sortBy">
+            <option value="popular">Más vendidos</option>
+            <option value="price-asc">Precio: menor a mayor</option>
+            <option value="price-desc">Precio: mayor a menor</option>
+            <option value="name-asc">Nombre A–Z</option>
+          </select>
+        </div>
+
+        <div class="buscador">
+          <input id="search" type="search" placeholder="Buscar producto…" aria-label="Buscar producto">
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LAYOUT TIENDA: FILTROS + CATÁLOGO ===== -->
+    <main class="tienda contenedor">
+      <!-- Sidebar Filtros -->
+      <aside class="filtros" aria-label="Filtros de catálogo">
+        <h3>Filtros</h3>
+
+        <div class="filtro">
+          <button class="filtro-btn" type="button">Disponibilidad ▼</button>
+          <div class="filtro-contenido">
+            <label><input class="f-check" type="checkbox" data-filter="stock" value="in" checked> En stock</label><br>
+            <label><input class="f-check" type="checkbox" data-filter="stock" value="out"> Agotado</label>
+          </div>
+        </div>
+
+        <div class="filtro">
+          <button class="filtro-btn" type="button">Precio ▼</button>
+          <div class="filtro-contenido">
+            <label><input class="f-radio" type="radio" name="precio" value="all" checked> Todos</label><br>
+            <label><input class="f-radio" type="radio" name="precio" value="lt10000"> Menos de $10.000</label><br>
+            <label><input class="f-radio" type="radio" name="precio" value="10k-20k"> $10.000 – $20.000</label><br>
+            <label><input class="f-radio" type="radio" name="precio" value="gt20000"> Más de $20.000</label>
+          </div>
+        </div>
+
+        <div class="filtro">
+          <button class="filtro-btn" type="button">Categoría ▼</button>
+          <div class="filtro-contenido">
+            <label><input class="f-check" type="checkbox" data-filter="category" value="alimentos" checked> Alimentos</label><br>
+            <label><input class="f-check" type="checkbox" data-filter="category" value="medicamentos" checked> Medicamentos</label><br>
+            <label><input class="f-check" type="checkbox" data-filter="category" value="accesorios" checked> Accesorios</label><br>
+            <label><input class="f-check" type="checkbox" data-filter="category" value="camas" checked> Camas</label>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Catálogo -->
+      <section class="catalogo" aria-live="polite">
+        <div class="encabezado-catalogo">
+          <h2>Productos</h2>
+          <p id="resumen-listado">Mostrando 0 de 0 productos</p>
+        </div>
+
+        <div id="gridProductos" class="productos">
+          <!-- Tarjetas de producto (ejemplos). Usa data-atributos para filtros/orden -->
+          <!-- Puedes duplicar y cambiar datos/imagen según tus productos reales -->
+
+          <article class="producto" 
+                   data-name="Synulox Comprimidos 250 mg" 
+                   data-brand="Zoetis"
+                   data-category="medicamentos" 
+                   data-price="13990" 
+                   data-old-price="15990" 
+                   data-stock="in" 
+                   data-popular="95">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Synulox comprimidos 250 mg" />
+            <h4 class="marca">ZOETIS</h4>
+            <p class="titulo">Synulox Comprimidos 250 mg</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito">Agregar</button>
+          </article>
+
+          <article class="producto" 
+                   data-name="Meloxivet 60 mL" 
+                   data-brand="Drag Pharma"
+                   data-category="medicamentos" 
+                   data-price="18490" 
+                   data-old-price="18990" 
+                   data-stock="in" 
+                   data-popular="90">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Meloxivet 60 mL" />
+            <h4 class="marca">DRAG PHARMA</h4>
+            <p class="titulo">Meloxivet 60 mL</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito">Agregar</button>
+          </article>
+
+          <article class="producto" 
+                   data-name="Cama Antiestrés 50 cm" 
+                   data-brand="Just for Pets"
+                   data-category="camas" 
+                   data-price="11490" 
+                   data-stock="in" 
+                   data-popular="88">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Cama antiestrés 50 cm" />
+            <h4 class="marca">JUST FOR PETS</h4>
+            <p class="titulo">Cama Antiestrés para Mascota 50 cm</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito">Agregar</button>
+          </article>
+
+          <article class="producto" 
+                   data-name="Nexgard 3 comprimidos 4–10 kg" 
+                   data-brand="NexGard"
+                   data-category="medicamentos" 
+                   data-price="18990" 
+                   data-old-price="19990" 
+                   data-stock="in" 
+                   data-popular="98">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Nexgard 3 comprimidos 4 a 10 kg" />
+            <h4 class="marca">NEXGARD</h4>
+            <p class="titulo">Nexgard Antiparasitario Perros 4–10 kg</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito">Agregar</button>
+          </article>
+
+          <article class="producto" 
+                   data-name="Artri-Tab" 
+                   data-brand="Intervet"
+                   data-category="medicamentos" 
+                   data-price="12990" 
+                   data-stock="out" 
+                   data-popular="70">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Artri-Tab suplemento articular" />
+            <h4 class="marca">INTERVET</h4>
+            <p class="titulo">Artri-Tab 60 tabletas</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito" disabled>Agotado</button>
+          </article>
+
+          <article class="producto" 
+                   data-name="Pelota mordedora XL" 
+                   data-brand="Kong"
+                   data-category="accesorios" 
+                   data-price="7990" 
+                   data-stock="in" 
+                   data-popular="85">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Pelota mordedora XL" />
+            <h4 class="marca">KONG</h4>
+            <p class="titulo">Pelota mordedora XL</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito">Agregar</button>
+          </article>
+
+          <article class="producto" 
+                   data-name="Alimento Premium 3 kg" 
+                   data-brand="ProPlan"
+                   data-category="alimentos" 
+                   data-price="23990" 
+                   data-old-price="25990"
+                   data-stock="in" 
+                   data-popular="99">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Alimento premium 3 kg" />
+            <h4 class="marca">PROPLAN</h4>
+            <p class="titulo">Alimento Premium 3 kg</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito">Agregar</button>
+          </article>
+
+          <article class="producto" 
+                   data-name="Correa Reflectante" 
+                   data-brand="PetLine"
+                   data-category="accesorios" 
+                   data-price="9990" 
+                   data-stock="in" 
+                   data-popular="60">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Correa reflectante" />
+            <h4 class="marca">PETLINE</h4>
+            <p class="titulo">Correa Reflectante</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito">Agregar</button>
+          </article>
+
+          <article class="producto" 
+                   data-name="Shampoo Hipoalergénico" 
+                   data-brand="VetClean"
+                   data-category="accesorios" 
+                   data-price="7490" 
+                   data-stock="in" 
+                   data-popular="55">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Shampoo hipoalergénico" />
+            <h4 class="marca">VETCLEAN</h4>
+            <p class="titulo">Shampoo Hipoalergénico 250 mL</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito">Agregar</button>
+          </article>
+
+          <article class="producto" 
+                   data-name="Snack Dental 7u" 
+                   data-brand="Dentastix"
+                   data-category="alimentos" 
+                   data-price="5990" 
+                   data-stock="in" 
+                   data-popular="80">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Snack dental 7 unidades" />
+            <h4 class="marca">DENTASTIX</h4>
+            <p class="titulo">Snack Dental 7 unidades</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito">Agregar</button>
+          </article>
+
+          <article class="producto" 
+                   data-name="Arnés de paseo M" 
+                   data-brand="PetLine"
+                   data-category="accesorios" 
+                   data-price="12990" 
+                   data-stock="out" 
+                   data-popular="40">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Arnés de paseo talla M" />
+            <h4 class="marca">PETLINE</h4>
+            <p class="titulo">Arnés de paseo M</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito" disabled>Agotado</button>
+          </article>
+
+          <article class="producto" 
+                   data-name="Hueso de cuero 2u" 
+                   data-brand="GoodDog"
+                   data-category="accesorios" 
+                   data-price="3990" 
+                   data-stock="in" 
+                   data-popular="50">
+            <span class="descuento"></span>
+            <img src="images/mascota.webp" alt="Hueso de cuero 2 unidades" />
+            <h4 class="marca">GOODDOG</h4>
+            <p class="titulo">Hueso de cuero (2u)</p>
+            <p class="precio"></p>
+            <button class="agregar-carrito">Agregar</button>
+          </article>
+        </div>
+
+        <!-- Paginación -->
+        <div class="paginacion">
+          <button id="prevPage" disabled>« Anterior</button>
+          <span id="pageInfo">Página 1</span>
+          <button id="nextPage">Siguiente »</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== CARRITO (botón flotante + drawer) ===== -->
+    <button id="btn-carrito" aria-controls="carritoDrawer" aria-expanded="false">
+      🛒 Carrito <span id="cartCount">0</span>
+    </button>
+
+    <aside id="carritoDrawer" class="carrito-drawer" aria-hidden="true">
+      <div class="carrito-header">
+        <h3>Tu carrito</h3>
+        <button id="cerrarCarrito" aria-label="Cerrar carrito">✕</button>
+      </div>
+      <ul id="lista-carrito" class="carrito-items"></ul>
+      <div class="carrito-footer">
+        <p id="total">Total: $0</p>
+        <div class="carrito-acciones">
+          <button id="vaciar-carrito" class="btn-sec">Vaciar</button>
+          <button id="comprar" class="btn-prim">Finalizar compra</button>
+        </div>
+      </div>
+    </aside>
+    <div id="carritoOverlay" class="carrito-overlay" aria-hidden="true"></div>
+
+    <!-- ===== FOOTER (tu footer completo) ===== -->
+    <footer>
+      <div class="secciones-footer">
+        <div class="seccion">
+          <h3>CONTÁCTANOS</h3>
+          <div class="contenido">
+            <form class="formulario">
+              <label for="nombre">Nombre:</label>
+              <input type="text" id="nombre" name="nombre" required />
+              <label for="email">Correo electrónico:</label>
+              <input type="email" id="email" name="email" required />
+              <label for="mensaje">Mensaje:</label>
+              <textarea id="mensaje" name="mensaje" rows="2" maxlength="150" required></textarea>
+              <button>Enviar</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="seccion">
+          <h3>ACERCA DE <br>AKUMANO NO PET</h3>
+          <div class="contenido">
+            <p><a href="nosotros/nosotros.html">Nosotros</a></p>
+            <p><a href="servicios/servicios.html">Servicios</a></p>
+            <p><a href="equipo/equipo.html">Equipo</a></p>
+            <p><a href="contacto/contacto.html">Contacto</a></p>
+            <p><a href="ventas/ventas.html">Ventas</a></p>
+          </div>
+        </div>
+        
+        <div class="mapa">
+          <h3>VISÍTANOS</h3>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.88714901387!2d-70.61949962357711!3d-33.42618639627127!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf6397175ef5%3A0x1c928b6db8bf3b45!2sAntonio%20Bellet%2077%2C%20Providencia%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1714097765093!5m2!1ses!2scl"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="informacion-adicional">
+        <div class="telefono">
+          <a href="tel:+56928579797">
+            <img src="images/icono_llamada.png" alt="Icono de teléfono"/>
+          </a>
+          <a href="tel:+56928579797">Llamada</a>
+        </div>        
+        <div class="redes-sociales">
+          <a href="#"><img src="images/facebook.png" alt="Facebook" /></a>
+          <a href="#"><img src="images/instagram.png" alt="Instagram"/></a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- API placeholder de tu proyecto -->
+    <div id="api-data"></div>
+
+    <!-- JS -->
+    <script src="js/app.js"></script>
+  </body>
+</html>

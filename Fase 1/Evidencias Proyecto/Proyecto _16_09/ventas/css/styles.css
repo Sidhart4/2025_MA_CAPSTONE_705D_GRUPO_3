@@ -1,0 +1,1131 @@
+/* =========================================================
+   TIENDA + CARRITO (adaptado a tu diseño, FORMATO NORMAL)
+   ========================================================= */
+:root{
+  --primary:#5213a1;
+  --accent:#30baaa;
+  --muted:#7a7a7a;
+  --soft:#f5f5f7;
+  --border:#e7e7e7;
+  --radius:14px;
+}
+body {
+    font-family: 'Lexend', sans-serif;
+    margin: 0;
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* Hacer que las imágenes se ajusten automáticamente al ancho del contenedor */
+body img {
+    max-width: 100%;
+    height: auto;
+    
+}
+
+h2 {
+    font-weight: normal;
+    color: #5213a1;
+    font-size: 4vh;
+}
+
+header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(73, 73, 73, .15);
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(50px);
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+    box-sizing: border-box; /* Asegura que el padding no cause desbordamiento */
+    font-size: 2.2vh;
+}
+
+button {
+    border-radius: 15px;
+    border: 2px solid #30baaa;
+    background-color: white;
+    color: #30baaa;
+    padding: 0.625rem 1.25rem; /* Ajuste del relleno */
+    font-size: 1.5rem; /* Tamaño de fuente */
+    cursor: pointer;
+    font-family: 'Lexend', sans-serif;
+}
+
+
+.logo {
+    max-width: 15vh; /* Ajusta este valor según sea necesario */
+    height: auto;
+}
+
+.oculto {
+    display: none;
+
+}
+
+hr {
+    width: 100%;
+    margin: 0;
+    border: 1px solid #f7d5bc;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: #30baaa;
+}
+
+footer a {
+    color: #c8e2e9;
+}
+
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    margin-left: auto;
+}
+
+nav ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+}
+
+nav ul li {
+    margin: 0;
+}
+
+nav ul li a {
+    color: white;
+    padding: 14px 30px;
+    font-weight: 300;
+    text-decoration: none;
+    text-align: center;
+    display: block;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+nav ul li a:hover {
+    color: #5213a1;
+}
+
+
+
+/* Estilos para el menú offcanvas */
+.offcanvas-nav {
+    display: none;
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background-color: #2c4495;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    z-index: 3000;
+}
+
+.offcanvas-nav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.offcanvas-nav li {
+    padding: 10%;
+}
+
+.offcanvas-nav a {
+    text-decoration: none;
+    font-size: 25px;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.offcanvas-nav a:hover {
+    color: #30baaa;
+}
+
+/* ===== Barra superior tienda ===== */
+.barra-tienda{ 
+    padding:1.25rem 2rem 0; 
+}
+.breadcrumbs{ 
+    color:var(--muted);
+     font-size:.95rem; 
+}
+.breadcrumbs a{ 
+    color:var(--muted); 
+}
+.breadcrumbs span{ 
+    margin:0 .25rem; 
+}
+
+.controles{
+  display:flex;
+   gap:1rem; 
+   align-items:center; 
+   justify-content:flex-end; 
+   flex-wrap:wrap;
+}
+.controles label{ 
+    margin-right:.35rem; 
+    color:var(--primary); 
+    font-weight:600; 
+}
+.controles select,
+.controles input[type="search"]{
+  border:1px solid #ddd;
+   border-radius:10px; 
+   padding:.4rem .6rem; 
+   font-family:'Lexend',sans-serif;
+}
+
+/* Compensar header fijo solo en desktop (tu header pasa a static <=1240) */
+@media screen and (min-width:1241px){
+  .barra-tienda, .tienda{ margin-top:88px; }
+}
+
+/* ===== Layout tienda (filtros + catálogo) ===== */
+.tienda{
+  display:grid; 
+  grid-template-columns:260px 1fr; gap:2rem;
+  padding:1.5rem 2rem 2.5rem;
+}
+
+/* ===== Sidebar filtros ===== */
+.filtros{
+  background-color:  rgb(223, 218, 218);
+  border:1px solid var(--border); 
+  border-radius:var(--radius);
+  padding:1rem; position:sticky; 
+  top:80px; height:fit-content;
+}
+.filtros h3{ 
+    color:var(--primary);
+     margin-top:.25rem; 
+    }
+
+.filtro{ 
+    border-bottom:1px dashed #e0e0e0;
+     padding:.6rem 0; 
+    }
+
+.filtro:last-child{ 
+    border-bottom:none; 
+}
+
+.filtro-btn{
+  width:100%; 
+  text-align:left;
+  background:none;
+  border:none;
+  font-weight:700;
+  color:var(--primary);
+  cursor:pointer; 
+  padding:.25rem 0; 
+  position:relative;
+}
+.filtro-btn::after{
+  content:'▾';
+  position:absolute; 
+  right:0; 
+  top:50%; 
+  transform:translateY(-50%); 
+  transition:transform .2s ease;
+}
+.filtro.active .filtro-btn::after{
+     transform:translateY(-50%) rotate(180deg); 
+    }
+
+.filtro-contenido{ 
+    display:none; 
+    padding:.35rem 0 .6rem .25rem; 
+}
+
+.filtro.active .filtro-contenido{ 
+    display:block; 
+}
+
+.filtros input[type="checkbox"],
+.filtros input[type="radio"]{ 
+    accent-color:var(--accent);
+ }
+
+/* ===== Catálogo ===== */
+.catalogo .encabezado-catalogo{
+  display:flex; 
+  align-items:baseline; 
+  justify-content:space-between; 
+  gap:1rem;
+}
+.catalogo h2{ 
+    color:var(--primary); 
+    margin:0; 
+}
+#resumen-listado{ 
+    color:#666; 
+    font-size:.95rem; 
+}
+
+/* Grilla: 4→3→2→1 (SOLO dentro del catálogo para no tocar otras .productos) */
+.catalogo .productos{
+  display:grid; 
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:1.25rem; 
+  margin-top:1rem;
+}
+
+/* Tarjeta de producto */
+.catalogo .producto{
+  background:#fff; 
+  border:1px solid #eee; 
+  border-radius:var(--radius);
+  padding:1rem; 
+  text-align:center; 
+  box-shadow:0 2px 10px rgba(0,0,0,.06); 
+  position:relative;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+
+.catalogo .producto:hover{ 
+    transform:translateY(-2px); 
+    box-shadow:0 6px 18px rgba(0,0,0,.08); 
+}
+
+.catalogo .producto img{
+  width:100%; 
+  height:180px; 
+  object-fit:contain; 
+  border-radius:10px; 
+  background:#fff; 
+  display:block;
+}
+.catalogo .producto .marca{ 
+    font-size:.8rem; 
+    color:#7c7c7c; 
+    letter-spacing:.05em; 
+    margin:.6rem 0 .15rem; 
+}
+
+.catalogo .producto .titulo{ 
+    min-height:44px; 
+}
+
+.catalogo .producto .precio{ 
+    font-weight:700; 
+    color:var(--accent); 
+    margin:.25rem 0 .75rem; 
+}
+
+.catalogo .producto .precio .tachado{ 
+    text-decoration:line-through; 
+    color:#9b9b9b; 
+    font-weight:400; 
+    margin-left:6px; 
+}
+
+/* Badge de descuento (se muestra por JS si hay old price) */
+.catalogo .producto .descuento{
+  display:none; 
+  position:absolute; 
+  top:12px; 
+  left:12px;
+  background:#e53935; color:#fff; 
+  font-weight:700; 
+  font-size:.78rem;
+  padding:.25rem .5rem;
+  border-radius:8px;
+}
+
+/* Botón agregar coherente con tu marca */
+.catalogo .producto .agregar-carrito{
+  border:0; 
+  background:var(--accent); color:#fff; 
+  padding:.55rem 1rem;
+  border-radius:10px; 
+  cursor:pointer; 
+  font-family:'Lexend',sans-serif;
+}
+.catalogo .producto .agregar-carrito:hover{ 
+    filter:brightness(.95); 
+}
+
+/* Estado agotado */
+.catalogo .producto[data-stock="out"]{ 
+    opacity:.75; 
+}
+.catalogo .producto[data-stock="out"] .agregar-carrito{ 
+    background:#c9c9c9; 
+    cursor:not-allowed; 
+}
+
+/* ===== Paginación ===== */
+.paginacion{
+  display:flex; 
+  align-items:center; 
+  gap:.75rem; 
+  justify-content:flex-end; 
+  margin-top:1rem;
+}
+
+.paginacion button{
+  border:1px solid #ddd; background:#fff; 
+  padding:.4rem .7rem; 
+  border-radius:10px; 
+  cursor:pointer;
+  transition:border-color .15s ease, color .15s ease;
+}
+
+.paginacion button:hover{ 
+    border-color:var(--accent); 
+    color:var(--accent); 
+}
+
+.paginacion button:disabled{
+     opacity:.5; cursor:not-allowed;
+     
+    }
+
+/* ===== Botón flotante del carrito ===== */
+#btn-carrito{
+  position:fixed; right:24px; 
+  bottom:24px; z-index:1200;
+  background:var(--primary); color:#fff; 
+  border:0; border-radius:999px;
+  padding:.7rem 1rem; 
+  box-shadow:0 8px 24px rgba(0,0,0,.18); 
+  cursor:pointer; 
+  font-family:'Lexend',sans-serif;
+}
+
+#btn-carrito #cartCount{
+  background:var(--accent); 
+  color:#fff; 
+  padding:.1rem .45rem; 
+  border-radius:10px; 
+  margin-left:.35rem;
+}
+
+/* ===== Drawer carrito ===== */
+.carrito-overlay{ 
+    display:none; 
+    position:fixed; 
+    inset:0; 
+    background:rgba(0,0,0,.45); 
+    z-index:1400; 
+}
+
+.carrito-overlay.activo{ 
+    display:block;
+ }
+
+.carrito-drawer{
+  position:fixed; 
+  top:0; right:-420px; 
+  width:380px; 
+  max-width:90vw; 
+  height:100%;
+  background:#fff; z-index:1500; 
+  box-shadow:-8px 0 24px rgba(0,0,0,.15);
+  transition:right .25s ease; 
+  display:flex; 
+  flex-direction:column;
+
+}
+.carrito-drawer.abierto{ 
+    right:0; 
+}
+
+.carrito-header{
+  padding:1rem; 
+  border-bottom:1px solid #eee; 
+  display:flex; 
+  justify-content:space-between; 
+  align-items:center;
+
+}
+.carrito-items{ 
+    list-style:none; 
+    margin:0; 
+    padding:.5rem 1rem; 
+    flex:1; 
+    overflow:auto; 
+}
+.carrito-item{
+  display:flex; 
+  align-items:center; 
+  gap:.6rem; 
+  padding:.5rem 0; 
+  border-bottom:1px dashed #eee;
+}
+
+.carrito-item .ci-info{ 
+    flex:1; 
+}
+
+.carrito-item .ci-nombre{ 
+    font-weight:600; 
+}
+
+.carrito-item .ci-precio{ 
+    color:var(--accent); 
+    font-weight:700; 
+}
+
+.carrito-item button{ 
+    border:0; 
+    background:none; 
+    cursor:pointer; 
+    color:#e53935; 
+    font-size:1.1rem; 
+}
+
+.carrito-footer{ 
+    border-top:1px solid #eee; 
+    padding:.9rem 1rem; 
+}
+.carrito-acciones{ 
+    display:flex; 
+    gap:.6rem; 
+    justify-content:
+    flex-end; 
+}
+
+.btn-sec{ 
+    border:1px solid #ddd; background:#fff; 
+    border-radius:10px; 
+    padding:.5rem .75rem; 
+}
+
+.btn-prim{ 
+    border:0; 
+    background:var(--accent); 
+    color:#fff; 
+    border-radius:10px; 
+    padding:.5rem .9rem; 
+}
+
+/* ===== Accesibilidad ===== */
+a:focus-visible, 
+button:focus-visible, 
+input:focus-visible, 
+select:focus-visible{
+  outline:2px solid var(--accent); 
+  outline-offset:2px;
+}
+
+/* =========================
+   ESTILOS WEB PEQUEÑA (<=1240)
+   ========================= */
+@media screen and (max-width:1240px){
+  /* tu header ya pasa a static aquí; padding más compacto */
+  .tienda{ 
+    padding:1.25rem 2rem 2rem; 
+}
+  .catalogo .productos{ 
+    grid-template-columns:repeat(3,1fr); 
+    gap:1rem; 
+}
+}
+
+/* =========================
+   Estilos para tablet (<=780)
+   ========================= */
+@media screen and (max-width:780px){
+  /* Filtros arriba y catálogo abajo */
+  .tienda{ 
+    grid-template-columns:1fr; 
+    gap:1.25rem; 
+    padding:1rem 1.5rem 2rem; 
+}
+  .controles{ 
+    justify-content:flex-start; 
+}
+  .catalogo .productos{ 
+    grid-template-columns:repeat(2,1fr); 
+}
+
+  /* Formato normal tipo .botonAgenda (60% centrado) para imágenes */
+  .catalogo .producto img{
+    width:60%;
+    height:auto;
+    margin:0 auto;
+  }
+}
+
+/* =========================
+   Estilos para celular (<=480)
+   ========================= */
+@media screen and (max-width:480px){
+  .catalogo .productos{ 
+    grid-template-columns:1fr; 
+    gap:1rem; 
+}
+
+  /* Mantener 60% centrado en mobile */
+  .catalogo .producto img{
+    width:60%;
+    height:auto;
+    margin:0 auto;
+  }
+
+  .catalogo .producto .agregar-carrito{ 
+    width:100%; 
+}
+  .carrito-drawer{ 
+    width:100%; 
+    max-width:100vw; 
+}
+
+  .barra-tienda{ 
+    padding:1rem 1.25rem 0; 
+}
+  .tienda{ padding:1rem 1.25rem 2rem; }
+}
+/* FIN PARTE ÚNICA DEL INICIO */
+
+.whatsapp {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+  
+.whatsapp img {
+    width: 10vh; /* Ajusta el tamaño según sea necesario */
+    height: auto;
+    border-radius: 50%; /* Para hacer un círculo */
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3); /* Sombra */
+    transition: transform 0.3s ease; /* Efecto de transición */
+}
+
+.whatsapp img:hover {
+    transform: scale(1.1); /* Efecto de escala al pasar el cursor */
+}
+
+footer {
+    background-color: #5213a1;
+    color: white;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding-top: 1vh;
+    font-size: 2vh;
+}
+
+footer h3 {
+    color: white;
+}
+
+.contenedor-footer {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.contacto-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    flex-wrap: nowrap;
+}
+
+.contacto-footer input {
+    width: 40vh;
+    padding: 5px;
+    margin-bottom: 6px;
+}
+
+.contacto-footer textarea {
+    width: 40vh;
+    padding: 10px;
+    margin-bottom: 6px;
+}
+
+.formulario {
+    display: flex;
+    align-items: stretch;
+    width: 100%;
+    flex-direction: column;
+    max-height: 50vh;
+}
+
+.formulario label {
+    margin-top: 5px;
+}
+
+.formulario input {
+    color: white;
+    border: none;
+    border-bottom: 2px solid #4CAF50;
+    background: none;
+    padding: 5px 0;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.formulario input:focus {
+    outline: none;
+    border-bottom: 2px solid #45a049;
+}
+
+.formulario textarea {
+    color: white;
+    border: none;
+    border-bottom: 2px solid #4CAF50;
+    background: none;
+    padding: 5px 0;
+    width: 100%;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+.formulario textarea:focus {
+    outline: none;
+    border-bottom: 2px solid #45a049;
+}
+
+.formulario button {
+    border-radius: 15px;
+    border: 2px solid #30baaa;
+    background-color: white;
+    color: #30baaa;
+    padding: 0.2rem;
+    margin: 1rem 0;
+    font-size: 1rem; /* Tamaño de fuente */
+    cursor: pointer;
+    font-family: 'Lexend', sans-serif;
+}
+
+.secciones-footer {
+    display: flex;
+    gap: 15vh;
+    padding: 0 10vh;
+}
+
+.seccion h3 {
+    color: white;
+}
+
+.mapa iframe {
+    width: 100%;
+    height: 70%;
+    border: 0;
+}
+
+.informacion-adicional {
+    width: 54%;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 2%;
+    align-items: center;
+    transition: transform 0.6s ease-in-out;
+}
+
+.informacion-adicional a:hover{
+    transform: scale(1.1);
+}
+
+.informacion-adicional img {
+    max-width: 40px;
+    max-height: 40px;
+}
+
+.telefono {
+    display: flex;
+    gap: 1vh;
+    align-items: center;
+}
+
+.redes-sociales {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+     
+}
+
+/* ESTILOS WEB PEQUEÑA */
+@media screen and (max-width: 1240px) { 
+    body {
+        font-size: 2vh;
+    }
+
+    h2 {
+        font-size: 6vh;
+    }
+
+    h3 {
+        font-size: 3vh;
+    }
+
+    header {
+        display: flex;
+        justify-content: space-between;
+        position: static;
+        background-color: #2c4495;
+    }
+
+    .logo {
+        max-width: 25vh; /* Ajusta este valor según sea necesario */
+        height: auto;
+    }
+
+    .azul {
+        display: none;
+    }
+
+    .oculto {
+        display: block;
+    }
+
+    /* ESTILO ÚNICO */
+
+    .contenedor-contacto p {
+        font-size: 3vh;
+    }
+
+    .contenedor-contacto h2 {
+        font-size: 4vh;
+    }
+    .promociones {
+        padding: 0;
+    }
+    
+    /* FIN ESTILO ÚNICO */
+
+    footer {
+        display: flex;
+    }
+
+    footer h3 {
+        font-size: 2vh;
+    }
+
+    .secciones-footer {
+        gap: 2vh;
+    }
+
+}
+
+/* Estilos para tablet */
+@media screen and (max-width: 780px) {
+
+    body {
+        font-size: 2.5vw; /* Ajuste adicional del tamaño base del cuerpo del texto en pantallas aún más pequeñas */
+    }
+
+    header {
+        position: sticky;
+    }
+
+    h2 {
+        font-size: 7vw; /* Ajuste adicional del tamaño del encabezado h2 en pantallas aún más pequeñas */
+    }
+
+    h3 {
+        font-size: 4.5vw; /* Ajuste adicional del tamaño del encabezado h3 en pantallas aún más pequeñas */
+    }
+
+    p {
+        font-size: 3vw; /* Ajuste adicional del tamaño del párrafo en pantallas aún más pequeñas */
+    }
+
+    nav ul {
+        flex-direction: column;
+        width: 100%;
+        display: none;
+    }
+
+    nav ul li {
+        width: 100%;
+    }
+
+    .open-btn {
+        display: block; /* Mostrar el botón para abrir el menú offcanvas */
+    }
+
+    .offcanvas-nav {
+        height: 100vh;
+        display: block; /* Mostrar el menú offcanvas */
+        position: absolute;
+    }
+
+    .contenedor-banner {
+        min-height: 10vh;
+        z-index: -1;
+    }
+
+    .botonBanner {
+        bottom: 10px;
+    }
+
+    .letra-grande {
+        font-weight: bold;
+        font-size: 4vh;
+    }
+    
+    .letra-chica {
+        font-size: 2vh;
+        color: #5213a1;
+    }
+
+    .botonAgenda {
+        display: flex;
+        justify-content: center;
+        margin-top: -50px;
+        margin-block-end: 25px;
+    }
+
+    /* ESTILO ÚNICO */
+
+    .credenciales {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+        align-items: stretch;
+    }
+
+    .credenciales .bloque {
+        width: 40%;
+        font-size: 3vh;
+    }
+    
+    .massoluciones {
+        margin-top: -5vh;
+    }
+
+    .carrusel-testimonio {
+        width: 90%;
+    }
+
+    /* FIN ESTILO ÚNICO */
+
+    .secciones-footer {
+        flex-direction: column;
+    }
+
+    .seccion h3 {
+        cursor: pointer;
+        position: relative; /* Necesario para el pseudo-elemento */
+    }
+
+    .seccion h3:hover {
+        color: #30baaa;
+    }
+
+    .seccion h3::after {
+        content: '▼'; /* Añade una flecha hacia abajo */
+        position: absolute;
+        right: -20px;
+        top: 0;
+        font-size: 14px;
+        transition: transform 0.3s ease; /* Transición suave para la rotación */
+        color: inherit; /* Asegura que la flecha tenga el mismo color que el texto */
+        line-height: 1; /* Asegura que la flecha se alinee correctamente con el texto */
+    }
+    
+    h3.active::after {
+        transform: rotate(180deg); /* Rota la flecha hacia arriba */
+    }
+    
+    .contenido {
+        display: none; /* Ocultar contenido por defecto */
+    }
+
+    .contenido.active {
+        display: block; /* Mostrar contenido cuando está activo */
+    }
+
+    .contacto-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+}
+
+/* Estilos para celular */
+@media screen and (max-width: 480px) {
+    body {
+        font-size: 3vw; /* Ajuste final del tamaño base del cuerpo del texto en pantallas muy pequeñas */
+    }
+
+    h2 {
+        font-size: 8vw; /* Ajuste final del tamaño del encabezado h2 en pantallas muy pequeñas */
+    }
+
+    h3 {
+        font-size: 5vw; /* Ajuste final del tamaño del encabezado h3 en pantallas muy pequeñas */
+    }
+
+    p {
+        font-size: 3.5vw; /* Ajuste final del tamaño del párrafo en pantallas muy pequeñas */
+    }
+
+    /* Ajustar el tamaño del logo en dispositivos muy pequeños */
+    .logo {
+        max-width: 100px; /* Por ejemplo */
+    }
+
+    .bloque {
+        text-align: center; /* Alinea el contenido al centro */
+    }
+
+    .bloque .letra-grande {
+        font-size: 4vh; /* Tamaño de letra grande */
+    }
+
+    .bloque .letra-chica {
+        font-size: 1.3vh; /* Tamaño de letra pequeña */
+        color: #5213a1;
+    }
+
+    /* ESTILO ÚNICO */
+
+    .credenciales .bloque {
+        width: 30%;
+        font-size: 2vh;
+        
+    }
+
+    .contenedor-contacto h2 {
+        font-size: 2vh;
+        text-align: center;
+        margin-top: 20px;
+        
+    }
+    .contenedor-contacto p {
+        padding: 3% 4%;
+        font-size: 1.5vh;
+        text-align: center;
+    }
+    .contacto {
+        flex-direction: column; /* Cambia la dirección del flex a columna en móviles */
+        width: 100%; /* Asegúrate de que el contenedor ocupe el 100% del ancho */
+        gap: 15px; /* Ajusta el espacio entre los elementos si es necesario */
+        align-items: center; /* Centra los elementos dentro del contenedor */
+    }
+
+    .contenedor-contacto img {
+        width: 60%; /* Ajusta el ancho de las imágenes */
+        height: auto;
+        max-width: none; /* Elimina cualquier restricción de ancho máximo */
+        margin: 0 auto; /* Centra las imágenes dentro del contenedor */
+        display: block; /* Asegura que las imágenes se comporten como elementos de bloque */
+    }
+    .beneficios h2 {
+        font-size: 3.5vh;
+    }
+    
+    .promociones {
+        flex-direction: column;
+        gap: 20px; /* Ajusta el espacio entre los elementos */
+      }
+    
+    .promocion {
+        width: 100%; /* Opcional: Ancho completo en dispositivos pequeños */
+        margin-bottom: 20px; /* Ajusta el margen inferior entre promociones */
+    }    
+    .servicios ul {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .servicios ul li {
+        width: 110%; /* Ajusta el ancho de los elementos li al 100% */
+        margin-bottom: 20px; /* Añade margen inferior entre elementos */
+    }
+    
+    .servicios ul li img {
+        width: 20%; /* Ajusta el ancho de las imágenes */
+        margin-right: 10px; /* Añade margen derecho entre imágenes */
+    } 
+    .contenedor-soluciones {
+        height: 117px; /* Ajusta la altura automáticamente según el contenido */
+        padding-top: 20px; /* Añade espacio arriba para separar del contenido superior */
+        padding-bottom: 20px; /* Añade espacio abajo para separar del contenido inferior */
+      }
+    .contenedor-soluciones p{
+        font-size: 2.5vh;
+    }
+    .contenedor-soluciones h2{
+        font-size: 2vh;
+        margin-bottom: 10px; /* Reducir el margen inferior del h2 */
+    }
+    .profesional {
+        flex-basis: 50%; /* Cambia el tamaño base para mostrar 2 elementos por fila */
+        padding: 0 5px; /* Reducir el padding lateral */
+        margin-bottom: 10px; /* Espacio entre elementos */
+    } 
+    .profesional img {
+        width: 100%; /* Ancho del contenedor */
+        object-fit: cover; /* Ajusta la imagen dentro del contenedor manteniendo su relación de aspecto */
+    }
+    .equipo-medico h2 {
+        font-size: 4vh;
+    }
+
+    .carrusel-testimonio {
+        width: 100%;
+    }
+
+    .botonAgenda {
+        width: 60%;
+        margin: 0 auto;
+    }
+ 
+      
+
+    /* FIN ESTILO ÚNICO */
+
+    .botonBanner {
+        bottom: 0;
+    }
+}
+/* ========= Menú hamburguesa: solo tablet/móvil y pegado a la derecha ========= */
+
+/* Desktop (>=781px): nav visible, hamburguesa oculta */
+@media (min-width: 781px){
+  nav ul{ display: flex !important; }           /* tu nav normal en desktop */
+  .open-btn{ display: none !important; }        /* oculta hamburguesa */
+  .offcanvas-nav{ display: none !important; }   /* seguridad: ocultar drawer */
+}
+
+/* Tablet/Móvil (<=780px): nav oculto, hamburguesa visible a la derecha */
+@media (max-width: 780px){
+  nav ul{ display: none !important; }           /* oculta links del nav */
+  .open-btn{
+    display: block !important;
+    position: fixed;        /* independiente del header */
+    top: 14px;              /* ajusta si quieres */
+    right: 16px !important; /* pega a la derecha */
+    left: auto !important;  /* neutraliza cualquier left heredado */
+    z-index: 1100;          /* sobre el header */
+    font-size: 30px;
+    color: white;
+    cursor: pointer;
+  }
+}
+
+/* (Opcional) Pequeño padding para que la hamburguesa no tape nada del header en móvil */
+@media (max-width: 780px){
+  header{ padding-right: 56px; }
+}

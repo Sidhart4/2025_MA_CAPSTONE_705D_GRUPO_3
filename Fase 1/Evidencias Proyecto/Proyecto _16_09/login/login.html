@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Akuma no Pet — Iniciar sesión</title>
+    <link rel="stylesheet" href="css/login.css">
+    <meta name="description"
+        content="Agenda tu cita veterinaria en 3 clics. Sistema de reservas con recordatorios automáticos por WhatsApp y correo." />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="container nav" id="navbar">
+            <!-- Marca -->
+            <div class="brand">
+                <div class="logo" aria-hidden="true">
+                    <a href="../index.html" aria-label="Inicio Akuma no Pet">
+                        <img src="../static/images/logo_transparente.png" alt="Logo Akuma no Pet" />
+                    </a>
+                </div>
+                <a href="../index.html" aria-label="Inicio Akuma no Pet">Akuma no Pet</a>
+            </div>
+
+            <!-- Menú -->
+            <nav class="menu" aria-label="Principal">
+                <a href="../index.html">Inicio</a>
+                <a href="../agenda/agenda.html">Agenda</a>
+                <a href="../productos/productos.html">Productos</a>
+                <a href="../equipo/equipo.html">Equipo</a>
+                <a href="../precios/precios.html">Precios</a>
+                <a href="../contacto/contacto.html">Contacto</a>
+            </nav>
+
+            <!-- Acciones -->
+            <div class="actions">
+                <a href="login.html" class="btn-blanco-nav" role="button">Iniciar sesión</a>
+                <a href="../agenda/agenda.html" class="btn-morado-nav" role="button">Reservar Cita</a>
+                
+                <button class="hamburger" id="btnMenu" aria-label="Abrir menú" aria-controls="panelMovil"
+                    aria-expanded="false">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Panel móvil -->
+            <div class="mobile-panel" id="panelMovil" aria-label="Menú móvil">
+                <a href="../index.html#servicios">Servicios</a>
+                <a href="../agenda/agenda.html">Agenda</a>
+                <a href="../equipo/equipo.html">Equipo</a>
+                <a href="../precios/precios.html">Precios</a>
+                <a href="../contacto/contacto.html">Contacto</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Card de Login -->
+    <main class="card" role="main" aria-labelledby="title">
+        <!-- Logo arriba del título -->
+        <img class="brand-mark" src="../static/images/logo_transparente.png" alt="Akuma no Pet">
+
+        <h1 id="title">Iniciar sesión</h1>
+        <p class="sub">Bienvenido(a) a Akuma no Pet</p>
+
+        <form id="formLogin" novalidate>
+            <!-- Email -->
+            <div class="field">
+                <label for="email" class="label">Email</label>
+                <div class="control">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M22 6l-10 7L2 6"></path>
+                        <rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect>
+                    </svg>
+                    <input id="email" name="email" type="email" class="input" placeholder="ejemplo@correo.cl"
+                        autocomplete="email" required />
+                </div>
+            </div>
+
+            <!-- Password -->
+            <div class="field">
+                <label for="password" class="label">Contraseña</label>
+                <div class="control">
+                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    <input id="password" name="password" type="password" class="input" placeholder="••••••••"
+                        autocomplete="current-password" required />
+                    <button type="button" class="toggle" id="togglePass" aria-label="Mostrar contraseña"
+                        title="Mostrar/Ocultar">
+                        <svg id="icoEye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recordarme -->
+            <label class="remember"><input type="checkbox" id="remember"> Recordarme</label>
+
+            <!-- Errores -->
+            <p id="error" class="error" role="alert" aria-live="polite"></p>
+
+            <!-- Botón principal -->
+            <button type="submit" class="btn" id="btnLogin">Iniciar sesión</button>
+
+            <!-- Olvidaste tu contraseña (centrado, bajo el botón) -->
+            <p class="forgot"><a href="#" id="forgotLink">¿Olvidaste tu contraseña?</a></p>
+
+            <!-- Registro -->
+            <p class="foot">
+                ¿No tienes cuenta?
+                <a href="#" id="linkRegistro">Crear cuenta</a>
+            </p>
+
+            <!-- Divider + Google -->
+            <div class="divider"><span class="line"></span><span>O CONTINÚA CON</span><span class="line"></span></div>
+            <button type="button" class="btn-google" id="btnGoogle">
+                <img src="../static/icons/google.svg" alt="" aria-hidden="true"> Continuar con Google
+            </button>
+
+            <p class="foot" style="margin-top:10px">pico pal que lee.</p>
+        </form>
+    </main>
+    <!-- ============== FOOTER ============== -->
+    <footer class="site-footer" id="footer">
+        <div class="container footer-grid">
+            <!-- Marca / descripción -->
+            <section class="footer-brand">
+                <div class="brandline">
+                    <span class="brand-badge" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 21s-7-3.6-7-9a7 7 0 1 1 14 0c0 5.4-7 9-7 9Z" fill="currentColor" />
+                        </svg>
+                    </span>
+                    <strong class="brand-name">Akuma no Pet</strong>
+                </div>
+
+                <p class="footer-lead">
+                    Clínica veterinaria dedicada al cuidado integral de tu mascota.
+                    Atención profesional con el cariño que tu compañero merece.
+                </p>
+
+                <div class="footer-actions">
+                    <a class="fbtn" href="tel:+56912345678" aria-label="Llamar">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M22 16.9v2.3a2 2 0 0 1-2.2 2 19.6 19.6 0 0 1-8.6-3.1 19.3 19.3 0 0 1-6-6A19.6 19.6 0 0 1 2.1 3.6 2 2 0 0 1 4 1.4h2.4a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L7.4 9a16.8 16.8 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 1.8Z"
+                                fill="currentColor" />
+                        </svg>
+                    </a>
+                    <a class="fbtn" href="mailto:hola@akumanopet.cl" aria-label="Enviar correo">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm16 2-8 5-8-5"
+                                fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Contacto -->
+            <section class="footer-col">
+                <h4>Contacto</h4>
+                <ul class="icon-list">
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M22 16.9v2.3a2 2 0 0 1-2.2 2 19.6 19.6 0 0 1-8.6-3.1 19.3 19.3 0 0 1-6-6A19.6 19.6 0 0 1 2.1 3.6 2 2 0 0 1 4 1.4h2.4a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L7.4 9a16.8 16.8 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 1.8Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </span>
+                        <a href="tel:+56912345678">+56 9 1234 5678</a>
+                    </li>
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm16 2-8 5-8-5"
+                                    fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <a href="mailto:hola@akumanopet.cl">hola@akumanopet.cl</a>
+                    </li>
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 22s7-4 7-10a7 7 0 1 0-14 0c0 6 7 10 7 10Z" fill="none"
+                                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        Av. Providencia 1234<br>Providencia, Santiago
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Horarios -->
+            <section class="footer-col">
+                <h4>Horarios</h4>
+                <ul class="icon-list">
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8" />
+                                <path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        Lun - Vie: 9:00 - 18:00
+                    </li>
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8" />
+                                <path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        Sáb: 9:00 - 14:00
+                    </li>
+                    <li>Dom: Cerrado</li>
+                </ul>
+            </section>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>© 2025 Akuma no Pet. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+    <script src="app.js"></script>
+</body>
+
+</html>

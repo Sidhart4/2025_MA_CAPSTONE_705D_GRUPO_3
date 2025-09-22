@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Akuma no Pet — Agenda</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <meta name="description"
+        content="Agenda tu cita veterinaria en 3 clics. Sistema de reservas con recordatorios automáticos por WhatsApp y correo." />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+     <!-- ============ NAVBAR ============ -->
+    <header>
+        <div class="container nav" id="navbar">
+            <div class="brand">
+                <div class="logo" aria-hidden="true">
+                    <a href="../index.html"></a>
+                    <img src="images/logo_transparente.png" alt="Logo Akuma no Pet">
+                </div>
+                <a href="#" aria-label="Inicio Akuma no Pet">Akuma no Pet</a>
+            </div>
+
+            <nav class="menu" aria-label="Principal">
+                <a href="../index.html">Inicio</a>
+                <a href="agenda.html">Agenda</a>
+                <a href="../productos/productos.html">Productos</a>
+                <a href="#equipo">Equipo</a>
+                <a href="#precios">Precios</a>
+                <a href="#contacto">Contacto</a>
+            </nav>
+
+            <div class="actions">
+                <a href="../login/login.html" class="btn-blanco-nav" role="button">Iniciar sesión</a>
+                <a href="agenda.html" class="btn-morado-nav" role="button">Reservar Cita</a>
+                <button class="hamburger" id="btnMenu" aria-label="Abrir menú">
+
+                </button>
+            </div>
+
+            <!-- Panel móvil -->
+            <div class="mobile-panel" id="panelMovil" aria-label="Menú móvil">
+                <a href="../index.html">Inicio</a>
+                <a href="#agenda">Agenda</a>
+                <a href="#equipo">Equipo</a>
+                <a href="#precios">Precios</a>
+                <a href="#contacto">Contacto</a>
+            </div>
+        </div>
+    </header>
+
+
+
+  <main class="page">
+    <div class="page-head">
+      <h1>Agenda</h1>
+
+      <div class="view-switch">
+        <button id="btnDia" class="pill active">Día</button>
+        <button id="btnSemana" class="pill">Semana</button>
+      </div>
+
+      <div class="head-actions">
+        <button id="prevDay" class="btn-icon" aria-label="Anterior">‹</button>
+        <button id="today" class="btn-light">Hoy</button>
+        <button id="nextDay" class="btn-icon" aria-label="Siguiente">›</button>
+        <button id="newAppt" class="btn-primary with-plus">
+          <span>+</span> Nueva Cita
+        </button>
+      </div>
+    </div>
+
+    <!-- Filtros -->
+    <section class="filters card">
+      <h3 class="filters-title">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <path d="M3 5h18M6 12h12M10 19h4" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        Filtros
+      </h3>
+
+      <div class="filters-grid">
+        <div class="field">
+          <label for="selPro">Profesional</label>
+          <div class="select">
+            <select id="selPro"></select>
+            <span class="chev">▾</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="selSrv">Servicio</label>
+          <div class="select">
+            <select id="selSrv"></select>
+            <span class="chev">▾</span>
+          </div>
+        </div>
+
+        <div class="field full">
+          <button id="clearFilters" class="btn-light stretch">Limpiar Filtros</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contenido -->
+    <section class="calendar card">
+      <header class="cal-head">
+        <h4 id="calTitle">Citas —</h4>
+      </header>
+
+      <!-- Vista Día -->
+      <div id="dayView" class="day-view">
+        <aside class="hours" id="hoursCol"></aside>
+        <div class="day-lane">
+          <div id="emptyState" class="empty">
+            <svg viewBox="0 0 24 24" width="42" height="42" aria-hidden="true">
+              <rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M8 3v4M16 3v4M4 10h16" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+            <p>No hay citas programadas para este día</p>
+          </div>
+          <ul id="apptList" class="appts"></ul>
+        </div>
+      </div>
+
+      <!-- Vista Semana -->
+      <div id="weekView" class="week-view hidden">
+        <div class="week-grid" id="weekGrid"></div>
+      </div>
+    </section>
+  </main>
+
+<!-- ============== FOOTER ============== -->
+    <footer class="site-footer" id="footer">
+        <div class="container footer-grid">
+            <!-- Marca / descripción -->
+            <section class="footer-brand">
+                <div class="brandline">
+                    <span class="brand-badge" aria-hidden="true">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 21s-7-3.6-7-9a7 7 0 1 1 14 0c0 5.4-7 9-7 9Z" fill="currentColor" />
+                        </svg>
+                    </span>
+                    <strong class="brand-name">Akuma no Pet</strong>
+                </div>
+
+                <p class="footer-lead">
+                    Clínica veterinaria dedicada al cuidado integral de tu mascota.
+                    Atención profesional con el cariño que tu compañero merece.
+                </p>
+
+                <div class="footer-actions">
+                    <a class="fbtn" href="tel:+56912345678" aria-label="Llamar">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M22 16.9v2.3a2 2 0 0 1-2.2 2 19.6 19.6 0 0 1-8.6-3.1 19.3 19.3 0 0 1-6-6A19.6 19.6 0 0 1 2.1 3.6 2 2 0 0 1 4 1.4h2.4a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L7.4 9a16.8 16.8 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 1.8Z"
+                                fill="currentColor" />
+                        </svg>
+                    </a>
+                    <a class="fbtn" href="mailto:hola@akumanopet.cl" aria-label="Enviar correo">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm16 2-8 5-8-5"
+                                fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </a>
+                </div>
+            </section>
+
+            <!-- Contacto -->
+            <section class="footer-col">
+                <h4>Contacto</h4>
+                <ul class="icon-list">
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M22 16.9v2.3a2 2 0 0 1-2.2 2 19.6 19.6 0 0 1-8.6-3.1 19.3 19.3 0 0 1-6-6A19.6 19.6 0 0 1 2.1 3.6 2 2 0 0 1 4 1.4h2.4a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2.1L7.4 9a16.8 16.8 0 0 0 6 6l1.2-1.1a2 2 0 0 1 2.1-.4c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 1.8Z"
+                                    fill="currentColor" />
+                            </svg>
+                        </span>
+                        <a href="tel:+56912345678">+56 9 1234 5678</a>
+                    </li>
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm16 2-8 5-8-5"
+                                    fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        <a href="mailto:hola@akumanopet.cl">hola@akumanopet.cl</a>
+                    </li>
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 22s7-4 7-10a7 7 0 1 0-14 0c0 6 7 10 7 10Z" fill="none"
+                                    stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        Av. Providencia 1234<br>Providencia, Santiago
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Horarios -->
+            <section class="footer-col">
+                <h4>Horarios</h4>
+                <ul class="icon-list">
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8" />
+                                <path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        Lun - Vie: 9:00 - 18:00
+                    </li>
+                    <li>
+                        <span class="i">
+                            <svg viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8" />
+                                <path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                        Sáb: 9:00 - 14:00
+                    </li>
+                    <li>Dom: Cerrado</li>
+                </ul>
+            </section>
+        </div>
+
+        <div class="container footer-bottom">
+            <p>© 2025 Akuma no Pet. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+  <script src="js/agenda.js"></script>
+</body>
+</html>

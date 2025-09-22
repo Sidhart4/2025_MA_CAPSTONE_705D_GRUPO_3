@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akumano no Pet </title>
+
+    <!-- Tu hoja de estilos existente -->
+    <link rel="stylesheet" href="css/styles.css" />
+
+    <!-- Tipografía Lexend (igual que tu proyecto) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet"/>
+
+    <link rel="icon" href="images/logo_transparente.png" type="image/x-icon">
+  </head>
+  <body>
+    <!-- ===== HEADER (igual a tu estructura) ===== -->
+    <header>
+      <a href="../index.html">
+        <img src="images/logo_transparente.png" alt="Logo" class="logo azul" />
+      </a>
+      <nav>
+        <ul>
+          <li><a href="../index.html">INICIO</a></li>
+          <li><a href="../ventas/ventas.html">VENTAS</a></li>
+          <li><a href="../servicios/servicios.html">SERVICIOS</a></li>
+          <li><a href="../equipo/equipo.html">ESPECIALISTAS</a></li>
+          <li><a href="../reserva/reserva.html">RESERVA</a></li>
+          <li><a href="../contacto/contacto.html">CONTACTO</a></li>
+        </ul>
+      </nav>
+
+      <!-- Botón hamburguesa (offcanvas) -->
+      <div class="open-btn">&#9776;</div>
+
+      <!-- Menú offcanvas -->
+      <div class="offcanvas-nav">
+        <button class="close-btn">&times;</button>
+        <ul>
+          <li><a href="../index.html">INICIO</a></li>
+          <li><a href="../ventas/ventas.html">VENTAS</a></li>
+          <li><a href="../servicios/servicios.html">SERVICIOS</a></li>
+          <li><a href="../equipo/equipo.html">ESPECIALISTAS</a></li>
+          <li><a href="../reserva/reserva.html">RESERVA</a></li>
+          <li><a href="../contacto/contacto.html">CONTACTO</a></li>
+        </ul>
+      </div>
+      <div class="overlay"></div>
+    </header>
+
+<section class="servicios-page">
+
+
+<!-- CARRUSEL DE BANNERS -->
+    <div class="slider">
+      <div class="slides">
+        <div class="slide">
+          <a href="reserva/reserva.html">
+          <img src="images/upscalemedia-transformed.png "  alt="Banner 1">
+          </a>
+        </div>
+      </div>
+    </div>
+  <!-- Barra superior (breadcrumbs + búsqueda) -->
+  <div class="barra-servicios contenedor">
+
+    <div class="controles">
+      <label for="buscaServicio">Buscar</label>
+      <input type="search" id="buscaServicio" placeholder="Limpieza, control, radiografías…">
+    </div>
+  </div>
+
+  <!-- Filtros por chips (categorías) -->
+  <div class="contenedor filtros-servicios">
+    <button class="chip active" data-cat="todos">Todos</button>
+    <button class="chip" data-cat="preventivo">Preventivo</button>
+    <button class="chip" data-cat="estetico">Estético</button>
+    <button class="chip" data-cat="especialista">Especialistas</button>
+    <button class="chip" data-cat="imagen">Imagenología</button>
+  </div>
+
+<div class="contenedor">
+  <div class="servicios-grid">
+
+    <!-- CARD -->
+    <article class="servicio-card" data-cat="preventivo">
+      <span class="badge">Popular</span>
+      <img src="images/DESPARACITACIÓN.png" alt="Desparasitación">
+      <h3 class="titulo">Desparasitación Interna y Externa</h3>
+      <p class="desc">Tratamiento completo contra parásitos intestinales, pulgas y garrapatas.</p>
+      <div class="meta">
+        <span class="precio">$12.990</span>
+        <span class="duracion">15–20 min</span>
+      </div>
+      <a class="btn-prim reservar" href="../reserva/reserva.html">Reservar</a>
+    </article>
+
+    <article class="servicio-card" data-cat="preventivo">
+      <img src="images/MEDICINA GENERAL.png" alt="Vacunación">
+      <h3 class="titulo">Vacunación Completa</h3>
+      <p class="desc">Esquema de vacunas esenciales para perros y gatos, según edad.</p>
+      <div class="meta">
+        <span class="precio">Desde $9.990</span>
+        <span class="duracion">10–15 min</span>
+      </div>
+      <a class="btn-prim reservar" href="../reserva/reserva.html">Reservar</a>
+    </article>
+
+    <article class="servicio-card" data-cat="estetico">
+      <img src="images/ESTÉTICA.png" alt="Peluquería">
+      <h3 class="titulo">Peluquería y Baño</h3>
+      <p class="desc">Corte higiénico, baño medicado y estética canina/felina.</p>
+      <div class="meta">
+        <span class="precio">Desde $15.990</span>
+        <span class="duracion">40–60 min</span>
+      </div>
+      <a class="btn-prim reservar" href="../reserva/reserva.html">Reservar</a>
+    </article>
+
+    <article class="servicio-card" data-cat="especialista">
+      <img src="images/ESTERILIZACIÓN.png" alt="Cirugía">
+      <h3 class="titulo">Cirugía de Esterilización</h3>
+      <p class="desc">Procedimiento seguro con monitoreo anestésico para perros y gatos.</p>
+      <div class="meta">
+        <span class="precio">Desde $49.990</span>
+        <span class="duracion">Según caso</span>
+      </div>
+      <a class="btn-prim reservar" href="../reserva/reserva.html">Reservar</a>
+    </article>
+
+    <article class="servicio-card" data-cat="especialista">
+      <img src="images/EUTANACIA.png" alt="Especialistas">
+      <h3 class="titulo">Consultas con Especialistas</h3>
+      <p class="desc">Cardiología, dermatología, etología y más en un solo lugar.</p>
+      <div class="meta">
+        <span class="precio">Evaluación desde $24.990</span>
+        <span class="duracion">30–45 min</span>
+      </div>
+      <a class="btn-prim reservar" href="../reserva/reserva.html">Reservar</a>
+    </article>
+
+    <article class="servicio-card" data-cat="imagen">
+      <img src="images/IMAGENOLOGÍA.png" alt="Imagenología">
+      <h3 class="titulo">Imagenología Veterinaria</h3>
+      <p class="desc">Ecografías y radiografías digitales para diagnóstico rápido.</p>
+      <div class="meta">
+        <span class="precio">Desde $19.990</span>
+        <span class="duracion">20–30 min</span>
+      </div>
+      <a class="btn-prim reservar" href="../reserva/reserva.html">Reservar</a>
+    </article>
+
+  </div>
+</div>
+
+<!-- Diferenciales -->
+<section class="contenedor diferenciales">
+  <div class="dif-card">
+    <img src="images/ATENCION24H.png" alt="" aria-hidden="true">
+    <h4>Atención 24/7</h4>
+    <p>Emergencias disponibles todo el día con veterinarios especializados.</p>
+  </div>
+  <div class="dif-card">
+    <img src="images/ESPECIALISTAS.png" alt="" aria-hidden="true">
+    <h4>Equipo Multidisciplinario</h4>
+    <p>Especialistas en diversas áreas para brindar el mejor cuidado.</p>
+  </div>
+  <div class="dif-card">
+    <img src="images/WHATSAPP.png" alt="" aria-hidden="true">
+    <h4>Reserva por WhatsApp</h4>
+    <p>Agenda rápida y recordatorios automáticos en tu celular.</p>
+  </div>
+</section>
+
+     <!-- ===== FOOTER (tu footer completo) ===== -->
+    <footer>
+      <div class="secciones-footer">
+        <div class="seccion">
+          <h3>CONTÁCTANOS</h3>
+          <div class="contenido">
+            <form class="formulario">
+              <label for="nombre">Nombre:</label>
+              <input type="text" id="nombre" name="nombre" required />
+              <label for="email">Correo electrónico:</label>
+              <input type="email" id="email" name="email" required />
+              <label for="mensaje">Mensaje:</label>
+              <textarea id="mensaje" name="mensaje" rows="2" maxlength="150" required></textarea>
+              <button>Enviar</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="seccion">
+          <h3>ACERCA DE <br>AKUMANO NO PET</h3>
+          <div class="contenido">
+            <p><a href="nosotros/nosotros.html">Nosotros</a></p>
+            <p><a href="servicios/servicios.html">Servicios</a></p>
+            <p><a href="equipo/equipo.html">Equipo</a></p>
+            <p><a href="contacto/contacto.html">Contacto</a></p>
+            <p><a href="ventas/ventas.html">Ventas</a></p>
+          </div>
+        </div>
+        
+        <div class="mapa">
+          <h3>VISÍTANOS</h3>
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3329.88714901387!2d-70.61949962357711!3d-33.42618639627127!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662cf6397175ef5%3A0x1c928b6db8bf3b45!2sAntonio%20Bellet%2077%2C%20Providencia%2C%20Regi%C3%B3n%20Metropolitana!5e0!3m2!1ses!2scl!4v1714097765093!5m2!1ses!2scl"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+      </div>
+
+      <div class="informacion-adicional">
+        <div class="telefono">
+          <a href="tel:+56928579797">
+            <img src="images/icono_llamada.png" alt="Icono de teléfono"/>
+          </a>
+          <a href="tel:+56928579797">Llamada</a>
+        </div>        
+        <div class="redes-sociales">
+          <a href="#"><img src="images/facebook.png" alt="Facebook" /></a>
+          <a href="#"><img src="images/instagram.png" alt="Instagram"/></a>
+        </div>
+      </div>
+    </footer>
+
+    <!-- API placeholder de tu proyecto -->
+    <div id="api-data"></div>
+
+    <!-- JS -->
+    <script src="js/app.js"></script>
+  </body>
+</html>

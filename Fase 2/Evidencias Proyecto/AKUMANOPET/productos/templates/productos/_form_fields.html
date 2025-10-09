@@ -1,0 +1,50 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'productos/css/styles.css' %}">
+<main class="page">
+  <h1>{{ titulo }}</h1>
+
+  <section class="card form-card">
+    <form method="post" enctype="multipart/form-data" class="form-grid" novalidate>
+      {% csrf_token %}
+
+      <div class="field">
+        <label for="{{ form.nombre.id_for_label }}">Nombre</label>
+        {{ form.nombre }}{% if form.nombre.errors %}<small class="err">{{ form.nombre.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.precio.id_for_label }}">Precio</label>
+        {{ form.precio }}{% if form.precio.errors %}<small class="err">{{ form.precio.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.stock.id_for_label }}">Stock</label>
+        {{ form.stock }}{% if form.stock.errors %}<small class="err">{{ form.stock.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.categoria.id_for_label }}">Categoría</label>
+        {{ form.categoria }}{% if form.categoria.errors %}<small class="err">{{ form.categoria.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="field col-2">
+        <label for="{{ form.descripcion.id_for_label }}">Descripción</label>
+        {{ form.descripcion }}{% if form.descripcion.errors %}<small class="err">{{ form.descripcion.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="field">
+        <label class="chk">{{ form.activo }} <span>Activo</span></label>
+        {% if form.activo.errors %}<small class="err">{{ form.activo.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="actions col-2">
+        <button class="btn-primary" type="submit">Guardar</button>
+        <a class="btn-ghost" href="{% url 'productos:lista' %}">Cancelar</a>
+      </div>
+    </form>
+  </section>
+</main>
+{% endblock %}

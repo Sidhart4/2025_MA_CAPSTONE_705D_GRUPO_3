@@ -1,0 +1,14 @@
+{% extends "main/base.html" %}
+{% block contenido %}
+<main class="page">
+  <section class="card">
+    <h3>Eliminar producto</h3>
+    <p>¿Eliminar <strong>{{ obj.nombre }}</strong> definitivamente?</p>
+    <form method="post">
+      {% csrf_token %}
+      <button class="btn-danger">Eliminar</button>
+      <a class="btn-ghost" href="{% url 'productos:lista' %}">Cancelar</a>
+    </form>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,411 @@
+/* ===== Page scaffold ===== */
+.wrap {
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 24px 16px
+}
+
+.p-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 8px 0 18px
+}
+
+.p-head h1 {
+    font-size: 32px;
+    margin: 0 0 6px
+}
+
+.p-head .sub {
+    color: #6b7280;
+    margin: 0
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap
+}
+
+.count {
+    color: #6b7280;
+    font-weight: 700;
+    white-space: nowrap
+}
+
+/* buscador + orden */
+.search {
+    position: relative;
+    min-width: 280px;
+    flex: 1 1 360px
+}
+
+.search input {
+    width: 100%;
+    height: 40px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 0 12px 0 36px;
+    font-weight: 600;
+    background: #fff
+}
+
+.search svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9aa1ad
+}
+
+.sort {
+    position: relative
+}
+
+.sort select {
+    appearance: none;
+    height: 40px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 0 36px 0 12px;
+    font-weight: 800;
+    background: #fff
+}
+
+.sort .chev {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6b7280;
+    pointer-events: none
+}
+
+/* ===== Layout ===== */
+.layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 22px
+}
+
+@media (max-width:1024px) {
+    .layout {
+        grid-template-columns: 1fr
+    }
+}
+
+/* Aside filtros */
+.aside {
+    display: flex;
+    flex-direction: column;
+    gap: 12px
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 14px
+}
+
+.card h4 {
+    margin: 0 0 10px;
+    font-size: 14px;
+    font-weight: 900;
+    color: #1f2937
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 200px;
+    overflow: auto;
+    padding-right: 6px
+}
+
+.list label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #374151;
+    font-weight: 600
+}
+
+.rows {
+    display: grid;
+    gap: 8px;
+    align-items: center
+}
+
+.range {
+    width: 100%
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between
+}
+
+.switch {
+    position: relative;
+    width: 44px;
+    height: 24px
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0
+}
+
+.switch span {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: #e5e7eb;
+    transition: .2s
+}
+
+.switch span::after {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    transition: .2s
+}
+
+.switch input:checked+span {
+    background: #c7d2fe
+}
+
+.switch input:checked+span::after {
+    left: 23px
+}
+
+.hint {
+    color: #6b7280;
+    font-size: 12px
+}
+
+.dash {
+    color: #9aa3b1
+}
+
+/* ===== Grid ===== */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px
+}
+
+@media (max-width:1180px) {
+    .grid {
+        grid-template-columns: repeat(3, 1fr)
+    }
+}
+
+@media (max-width:840px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr)
+    }
+}
+
+@media (max-width:540px) {
+    .grid {
+        grid-template-columns: 1fr
+    }
+}
+
+/* Cards */
+.card-p {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 10px 22px rgba(17, 24, 39, .08);
+    display: flex;
+    flex-direction: column
+}
+
+.thumb {
+    padding: 12px 12px 0 12px;
+    position: relative
+}
+
+.pic {
+    border-radius: 14px;
+    overflow: hidden;
+    background: #0b0b10;
+    aspect-ratio: 1/1;
+    display: grid;
+    place-items: center
+}
+
+.pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform .45s
+}
+
+.card-p:hover .pic img {
+    transform: scale(1.03)
+}
+
+.fav {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer
+}
+
+.badges {
+    position: absolute;
+    left: 24px;
+    top: 24px;
+    display: flex;
+    gap: 8px;
+    z-index: 1
+}
+
+.badge {
+    padding: .25rem .55rem;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 900;
+    color: #fff
+}
+
+.badge.sale {
+    background: #ef4444
+}
+
+.badge.new {
+    background: #16a34a
+}
+
+.body {
+    padding: 12px 14px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px
+}
+
+.ttl {
+    font-weight: 900
+}
+
+.desc {
+    color: #6b7280;
+    font-size: .92rem
+}
+
+.meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #6b7280;
+    font-weight: 700
+}
+
+.stars {
+    color: #f59e0b;
+    letter-spacing: 1px
+}
+
+.price {
+    display: flex;
+    align-items: center;
+    gap: 8px
+}
+
+.now {
+    font-weight: 900
+}
+
+.old {
+    color: #9ca3af;
+    text-decoration: line-through
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px
+}
+
+.add {
+    flex: 1 1 auto;
+    height: 40px;
+    border-radius: 12px;
+    border: none;
+    background: #111214;
+    color: #fff;
+    font-weight: 900;
+    cursor: pointer
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    display: grid;
+    place-items: center;
+    cursor: pointer
+}
+
+.load {
+    display: grid;
+    justify-items: center;
+    margin: 18px 0 28px
+}
+
+.small {
+    color: #6b7280
+}
+
+/* Animación de aparición */
+.mount {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeIn .35s ease forwards
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+        transform: none
+    }
+}
+.card-p { position: relative; }
+.card-p .thumb { position: relative; }
+.card-actions{
+  position:absolute; top:8px; right:8px; display:flex; gap:6px;
+}
+.card-actions .icon,
+.card-actions button.icon{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:32px; height:32px; border-radius:10px; border:none;
+  background:#ffffffcc; backdrop-filter: blur(6px); cursor:pointer; text-decoration:none;
+}
+.card-actions .icon.edit:hover{ background:#e0e7ff; }
+.card-actions .icon.del:hover{  background:#fee2e2; }
+.inline{ display:inline; }

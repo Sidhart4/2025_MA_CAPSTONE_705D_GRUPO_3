@@ -1,0 +1,197 @@
+{% extends "main/base.html" %}
+{% load static humanize %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'productos/css/styles.css' %}">
+
+<main class="wrap">
+  <header class="p-head">
+    <div>
+      <h1>Productos</h1>
+      <p class="sub">Encuentra todo lo que necesitas para el cuidado de tu mascota</p>
+    </div>
+
+    <!-- Toolbar -->
+    <form class="toolbar" method="get">
+      <div class="search">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+          <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" fill="none"></circle>
+          <path d="M21 21l-3.5-3.5" stroke="currentColor" stroke-width="2" fill="none"></path>
+        </svg>
+        <input name="q" value="{{ q }}" type="search" placeholder="Buscar productos…">
+      </div>
+
+      <div class="count">
+        {{ page_obj.paginator.count }} productos encontrados
+      </div>
+
+      <label class="sort">
+        <select name="sort" aria-label="Orden">
+          <option value="relevance" {% if sort == 'relevance' %}selected{% endif %}>Relevancia</option>
+          <option value="priceAsc"  {% if sort == 'priceAsc' %}selected{% endif %}>Precio: menor a mayor</option>
+          <option value="priceDesc" {% if sort == 'priceDesc' %}selected{% endif %}>Precio: mayor a menor</option>
+          <option value="rating"    {% if sort == 'rating' %}selected{% endif %}>Mejor valoración</option>
+          <option value="new"       {% if sort == 'new' %}selected{% endif %}>Más nuevos</option>
+        </select>
+        <span class="chev">▾</span>
+      </label>
+
+      <input type="hidden" name="size" value="{{ size }}">
+      <button class="btn dark" type="submit">Aplicar</button>
+
+      {# SOLO staff ve el botón de crear #}
+      {% if user.is_authenticated and user.is_staff %}
+        <a class="btn-primary" href="{% url 'productos:crear' %}">+ Nuevo producto</a>
+      {% endif %}
+    </form>
+  </header>
+
+  <div class="layout">
+    <!-- ===== Aside / Filtros ===== -->
+    <form class="aside" id="filters" method="get">
+      <h3>Filtros</h3>
+
+      <section class="card">
+        <h4>Categorías</h4>
+        <div class="list">
+          {% for c in all_cats %}
+            <label>
+              <input type="checkbox" name="cat" value="{{ c }}" {% if c in cats %}checked{% endif %}>
+              {{ c }}
+            </label>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="card">
+        <h4>Tipo de Mascota</h4>
+        <div class="list">
+          <label><input type="checkbox" name="pet" value="Perro" {% if "Perro" in pets %}checked{% endif %}>Perro</label>
+          <label><input type="checkbox" name="pet" value="Gato"  {% if "Gato"  in pets %}checked{% endif %}>Gato</label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h4>Precio (CLP)</h4>
+        <div class="rows">
+          <input type="number" name="min" value="{{ minp|default:'0' }}" min="0">
+          <span class="dash">—</span>
+          <input type="number" name="max" value="{{ maxp|default:'200000' }}" min="0">
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="row">
+          <h4>Solo en stock</h4>
+          <label class="switch">
+            <input type="checkbox" name="inStock" value="1" {% if in_stock %}checked{% endif %}>
+            <span></span>
+          </label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="row">
+          <h4>Solo ofertas</h4>
+          <label class="switch">
+            <input type="checkbox" name="onlyDeals" value="1" {% if only_deals %}checked{% endif %}>
+            <span></span>
+          </label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h4>Valoración</h4>
+        <div class="list">
+          <label><input type="radio" name="rating" value="4" {% if rating_min == '4' %}checked{% endif %}>4★ o más</label>
+          <label><input type="radio" name="rating" value="3" {% if rating_min == '3' %}checked{% endif %}>3★ o más</label>
+          <label><input type="radio" name="rating" value="0" {% if rating_min == '0' %}checked{% endif %}>Cualquiera</label>
+        </div>
+      </section>
+
+      <section class="card">
+        <h4>Marca</h4>
+        <div class="list">
+          {% for b in all_brands %}
+            <label>
+              <input type="checkbox" name="brand" value="{{ b }}" {% if b in brands %}checked{% endif %}>
+              {{ b }}
+            </label>
+          {% endfor %}
+        </div>
+      </section>
+
+      <input type="hidden" name="sort" value="{{ sort }}">
+      <input type="hidden" name="size" value="{{ size }}">
+      <button class="btn dark" type="submit">Aplicar filtros</button>
+    </form>
+
+    <!-- ===== Grid ===== -->
+    <section class="grid">
+      {% for p in page_obj %}
+        <article class="card-p">
+          <div class="thumb">
+            <div class="badges">
+              {% if p.etiqueta == "Nuevo" %}<span class="badge new">Nuevo</span>{% endif %}
+              {% if p.precio_anterior %}<span class="badge sale">Oferta</span>{% endif %}
+            </div>
+            <button class="fav" title="Favorito">❤</button>
+            <div class="pic">
+              {% if p.imagen %}
+                <img src="{{ p.imagen.url }}" alt="{{ p.nombre }}">
+              {% else %}
+                <img src="{% static 'images/placeholder.png' %}" alt="{{ p.nombre }}">
+              {% endif %}
+            </div>
+
+            {# SOLO staff ve Editar / Eliminar #}
+            {% if user.is_authenticated and user.is_staff %}
+              <div class="card-actions">
+                <a class="icon edit" href="{% url 'productos:editar' p.id %}" title="Editar">✎</a>
+                <form method="post" action="{% url 'productos:borrar' p.id %}" onsubmit="return confirm('¿Eliminar {{ p.nombre }}?')" class="inline">
+                  {% csrf_token %}
+                  <button class="icon del" title="Eliminar">🗑</button>
+                </form>
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="body">
+            <div class="ttl">{{ p.nombre }}</div>
+            <div class="desc">{{ p.descripcion|default:"" }}</div>
+
+            <div class="meta">
+              <span class="stars" aria-label="{{ p.valoracion }} de 5">★★★★★</span>
+              <span>{% if p.stock > 0 %}En stock{% else %}Sin stock{% endif %}</span>
+            </div>
+
+            <div class="price">
+              <span class="now">${{ p.precio|floatformat:0|intcomma }}</span>
+              {% if p.precio_anterior %}<span class="old">${{ p.precio_anterior|floatformat:0|intcomma }}</span>{% endif %}
+            </div>
+
+            <div class="actions">
+              <a class="add" href="#">Agregar</a>
+              <a class="icon" href="#" title="Ver">👁</a>
+            </div>
+          </div>
+        </article>
+      {% empty %}
+        <p>No hay productos que coincidan con tu búsqueda.</p>
+      {% endfor %}
+    </section>
+  </div>
+
+  {% if page_obj.paginator.num_pages > 1 %}
+    <nav class="paginacion">
+      {% if page_obj.has_previous %}
+        <a class="btn-blanco-nav" href="?page={{ page_obj.previous_page_number }}&{{ params.urlencode }}">« Anterior</a>
+      {% endif %}
+      <span>Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}</span>
+      {% if page_obj.has_next %}
+        <a class="btn-blanco-nav" href="?page={{ page_obj.next_page_number }}&{{ params.urlencode }}">Siguiente »</a>
+      {% endif %}
+    </nav>
+  {% endif %}
+</main>
+{% endblock %}

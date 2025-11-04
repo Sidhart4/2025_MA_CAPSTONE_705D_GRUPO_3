@@ -1,0 +1,313 @@
+/* ========= Page ========= */
+.page {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: 1.25rem;
+}
+
+.page-head {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.page-head h1 {
+    margin: 0;
+    font-size: 1.65rem;
+}
+
+.view-switch {
+    display: flex;
+    gap: .4rem;
+}
+
+.pill {
+    padding: .4rem .8rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    background: #fff;
+    color: #374151;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.pill.active {
+    background: #5213a1;
+    color: #fff;
+    border-color: transparent;
+}
+
+.head-actions {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.with-plus {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+}
+
+.with-plus span {
+    font-weight: 900;
+    font-size: 1.1rem;
+}
+
+/* ========= Cards ========= */
+.card {
+    background: #fff;
+    border: 1px solid #eef1f6;
+    border-radius: 16px;
+    box-shadow: 0 10px 24px rgba(17, 24, 39, .06);
+    padding: 1rem;
+}
+
+/* ========= Filters ========= */
+.filters-title {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: 0 0 .75rem;
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .8rem;
+}
+
+.field label {
+    display: block;
+    font-size: .9rem;
+    color: #6b7280;
+    margin: 0 0 .25rem;
+}
+
+.select {
+    position: relative;
+}
+
+.select select {
+    width: 100%;
+    padding: .6rem .9rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #111827;
+    appearance: none;
+    background: #fff;
+}
+
+.select .chev {
+    position: absolute;
+    right: .7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #6b7280;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+.stretch {
+    width: 100%;
+}
+
+/* ========= Calendar header ========= */
+.cal-head {
+    border-bottom: 1px dashed #eef1f6;
+    margin: -.2rem 0 1rem;
+    padding-bottom: .6rem;
+}
+
+#calTitle {
+    margin: 0;
+    font-size: 1rem;
+    color: #374151;
+}
+
+/* ========= Day view (grid) ========= */
+.day-view {
+    --slot-h: 44px;
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 12px;
+}
+
+.hours {
+    display: grid;
+    grid-auto-rows: var(--slot-h);
+    color: #6b7280;
+    padding-top: 6px;
+}
+
+.hours .t {
+    font-size: .9rem;
+}
+
+.day-lane {
+    position: relative;
+    border-left: 1px dashed #e5e7eb;
+    padding-left: 8px;
+}
+
+/* ========= Day view: grid de 30' sin inline ========= */
+#dayView .appts {
+    /* Rejilla vertical: 09:00–18:00 => 18 filas de 30 min */
+    display: grid;
+    grid-template-rows: repeat(18, var(--slot-h, 44px));
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0 8px 0 0;
+}
+
+/* Tarjeta de cita (sin margin; el gap ya separa) */
+#dayView .appt {
+    margin: 0;
+    background: #f5f7ff;
+    border: 2px solid #6d28d9;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+#dayView .appt .ttl {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+#dayView .appt .meta {
+    color: #6b7280;
+    font-size: .92rem;
+}
+
+/* Posicionamiento */
+/* r-N = fila de inicio (1..18) */
+.r-1 {
+    grid-row-start: 1
+}
+
+.r-2 {
+    grid-row-start: 2
+}
+
+.r-3 {
+    grid-row-start: 3
+}
+
+.r-4 {
+    grid-row-start: 4
+}
+
+.r-5 {
+    grid-row-start: 5
+}
+
+.r-6 {
+    grid-row-start: 6
+}
+
+.r-7 {
+    grid-row-start: 7
+}
+
+.r-8 {
+    grid-row-start: 8
+}
+
+.r-9 {
+    grid-row-start: 9
+}
+
+.r-10 {
+    grid-row-start: 10
+}
+
+.r-11 {
+    grid-row-start: 11
+}
+
+.r-12 {
+    grid-row-start: 12
+}
+
+.r-13 {
+    grid-row-start: 13
+}
+
+.r-14 {
+    grid-row-start: 14
+}
+
+.r-15 {
+    grid-row-start: 15
+}
+
+.r-16 {
+    grid-row-start: 16
+}
+
+.r-17 {
+    grid-row-start: 17
+}
+
+.r-18 {
+    grid-row-start: 18
+}
+
+/* s-N = número de filas que ocupa (30' = 1, 60' = 2, etc.) */
+.s-1 {
+    grid-row-end: span 1
+}
+
+.s-2 {
+    grid-row-end: span 2
+}
+
+.s-3 {
+    grid-row-end: span 3
+}
+
+.s-4 {
+    grid-row-end: span 4
+}
+
+.s-5 {
+    grid-row-end: span 5
+}
+
+.s-6 {
+    grid-row-end: span 6
+}
+
+.btn-primary {
+    background: #5213a1;
+    color: #fff;
+    padding: .5rem .8rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block
+}
+
+.btn-light {
+    background: #f3f4f6;
+    color: #111;
+    padding: .5rem .8rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: #fff;
+    padding: .5rem .8rem;
+    border-radius: 8px;
+    text-decoration: none;
+    display: inline-block
+}

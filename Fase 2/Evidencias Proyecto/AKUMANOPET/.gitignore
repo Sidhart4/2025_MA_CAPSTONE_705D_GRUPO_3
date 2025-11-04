@@ -1,0 +1,34 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C virtual env
+venv/
+env/
+ENV/
+*.egg-info/
+
+# Django stuff:
+*.log
+*.pot
+*.pyc
+*.pyo
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+
+# Distribution / packaging
+build/
+dist/
+*.egg
+*.egg-info/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Environment variables
+.env

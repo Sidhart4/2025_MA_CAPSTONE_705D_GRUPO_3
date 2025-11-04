@@ -1,0 +1,63 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'carrito/cart.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<div class="cart-wrap">
+  <h1 class="cart-title">Tu carrito</h1>
+
+  <table class="cart-table">
+    <thead>
+      <tr>
+        <th>Producto</th>
+        <th>Cant.</th>
+        <th>Precio</th>
+        <th>Subtotal</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for it in items %}
+      <tr>
+        <td>
+          {{ it.producto.nombre }}
+        </td>
+        <td>
+          <form action="{% url 'carrito:update' it.producto.id %}" method="post">
+            {% csrf_token %}
+            <input class="cart-qty-input" type="number" name="qty" value="{{ it.qty }}" min="1">
+            <button class="btn btn-ghost" type="submit">Actualizar</button>
+          </form>
+        </td>
+        <td>${{ it.price }}</td>
+        <td><strong>${{ it.subtotal }}</strong></td>
+        <td class="cart-actions">
+          <form action="{% url 'carrito:remove' it.producto.id %}" method="post">
+            {% csrf_token %}
+            <button class="btn btn-ghost" type="submit">Quitar</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5">Tu carrito está vacío.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="cart-summary">
+    <div class="cart-total">Total: ${{ total }}</div>
+    <div class="cart-cta">
+      <form action="{% url 'carrito:clear' %}" method="post">
+        {% csrf_token %}
+        <button class="btn btn-ghost" type="submit">Vaciar carrito</button>
+      </form>
+      <a class="btn btn-primary" href="{% url 'ventas:checkout' %}">Ir a pagar</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

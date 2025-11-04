@@ -1,0 +1,70 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'agenda/css/reserva.css' %}">
+<main class="wizard container" style="max-width:1100px; padding:26px 0 64px">
+  <header class="wizard-head">
+    <div class="path">Paso 3 de 3</div>
+    <div class="progress"><div class="bar" style="width:100%"></div></div>
+    <div class="pct">100% completado</div>
+  </header>
+
+  <section id="stageCheckout" class="stage">
+    <h2>Confirma tu reserva</h2>
+    <p class="lead">Ingresa tus datos y revisa el resumen.</p>
+
+    <div class="checkout-grid">
+      <div class="checkout-form">
+        <form method="post" class="box">
+          {% csrf_token %}
+          <h3 class="box-title">Tus datos</h3>
+
+          <label class="f-field"><span>Nombre</span>{{ form.nombre }}</label>
+          <label class="f-field"><span>Email</span>{{ form.email }}</label>
+          <label class="f-field"><span>WhatsApp (opcional)</span>{{ form.whatsapp }}</label>
+
+          <div class="f-checks">
+            <label class="f-check">{{ form.recuerda_mail }} <span>Recordatorio por email</span></label>
+            <label class="f-check">{{ form.recuerda_wa }} <span>Recordatorio por WhatsApp</span></label>
+          </div>
+
+          <h3 class="box-title" style="margin-top:14px">Datos de tu mascota</h3>
+          <label class="f-field"><span>Nombre de la mascota</span>{{ form.mascota }}</label>
+          <label class="f-field"><span>Especie</span>{{ form.especie }}</label>
+
+          <div class="navRow">
+            <a class="btn-ghost" href="{% url 'agenda:reservar' %}?step=2"><span class="arr">‹</span> Anterior</a>
+            <button class="btn-next enabled" type="submit">Confirmar Reserva <span class="arr">›</span></button>
+          </div>
+        </form>
+      </div>
+
+      <aside class="box checkout-summary" aria-label="Resumen de la cita">
+        <h3 class="box-title">Resumen de la cita</h3>
+        <div id="resumenCita">
+          <div class="rowline">
+            <strong>{{ resumen.servicio.nombre }}</strong>
+            <div class="muted">{{ resumen.servicio.descripcion }}</div>
+            <div class="muted">⏱ {{ resumen.servicio.duracion_min_default|default:30 }} min</div>
+          </div>
+          <div class="rowline">
+            <div>📅 {{ resumen.fecha }}<br>⏰ {{ resumen.hora }} hrs</div>
+          </div>
+          <div class="rowline">
+            👩‍⚕️ {{ resumen.profesional|default:"Cualquier profesional disponible" }}
+          </div>
+        </div>
+        <hr class="sep">
+        <div class="resume-total">
+          <span>Total a pagar:</span>
+          <strong>
+            {% if resumen.servicio.precio %}${{ resumen.servicio.precio|intcomma }}{% else %}—{% endif %}
+          </strong>
+        </div>
+      </aside>
+    </div>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,33 @@
+/* ——— Registro: extras sobre el CSS de login ——— */
+
+/* Ajusta un poco la card para formularios más largos */
+.card{ padding-bottom: 22px; }
+
+/* Fila de términos en 2 bloques como en tu captura */
+.terms-row{
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px 12px;
+  margin: 6px 0 4px;
+  font-size: 13px;
+  color:#111827;
+}
+.terms-check{
+  display:flex; align-items:center; gap:.5rem;
+}
+.terms-check input{
+  width:16px; height:16px;
+}
+.terms-links a{
+  color:#5213A1; font-weight:700;
+}
+.terms-links a:hover{ text-decoration: underline; }
+
+/* Pequeños ajustes de inputs para este formulario */
+#password, #password2{ letter-spacing: .02em; }
+
+/* Compacto en móvil */
+@media (max-width:640px){
+  .terms-row{ grid-template-columns: 1fr; gap:6px; }
+}

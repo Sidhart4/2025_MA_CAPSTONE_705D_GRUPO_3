@@ -1,0 +1,156 @@
+{% extends "main/base.html" %}
+{% load static humanize %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'agenda/css/reserva.css' %}">
+
+<div class="page-reserva">
+
+  <!-- HERO -->
+  <section class="hero-agenda">
+    <div class="container">
+      <h1>Selecciona fecha y hora</h1>
+      <p>Elige el momento que mejor te acomode para la cita</p>
+      <div class="steps" aria-hidden="true">
+        <div class="step">
+          <div class="chip"><span class="i">📅</span></div>
+          <h3>1. Elige el servicio</h3>
+          <p>Selecciona el tipo de atención</p>
+        </div>
+        <div class="step">
+          <div class="chip"><span class="i">⏱️</span></div>
+          <h3>2. Fecha y hora</h3>
+          <p>Escoge el horario que se ajuste a tu agenda</p>
+        </div>
+        <div class="step">
+          <div class="chip"><span class="i">✅</span></div>
+          <h3>3. Confirmación</h3>
+          <p>Confirma tu cita en un click</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Progreso superior -->
+  <header class="progress-row" aria-label="Progreso">
+    <span class="step-label">Paso 2 de 3</span>
+    <div class="progress" role="progressbar"
+         aria-valuemin="0" aria-valuemax="100"
+         aria-valuenow="{{ percent|default:66 }}">
+      <div class="bar" style="width: {{ percent|default:66 }}%"></div>
+    </div>
+    <span class="pct">{{ percent|default:66 }}% completado</span>
+  </header>
+
+  <!-- Contenido -->
+  <main class="wizard">
+    <section class="stage" aria-labelledby="titleFechaHora">
+      <h2 id="titleFechaHora">Selecciona fecha y hora</h2>
+      <p class="lead">Elige el momento que mejor te acomode para la cita</p>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <!-- Profesional (opcional) -->
+   <div class="horario-card">
+  <label class="pro-label"><span>👤</span> Profesional (opcional)</label>
+  <div class="pro-select-wrap">
+    {{ form.profesional }}   <!-- usa tu clase .pro-select -->
+    <span class="pro-caret">▾</span>
+  </div>
+</div>
+        <!-- Próxima hora disponible -->
+        {% if proxima_hora %}
+        <div class="next-slot" role="status">
+          <div class="next-slot__icon">📆</div>
+          <div class="next-slot__text">
+            Próxima hora disponible: <strong>{{ proxima_hora }}</strong>
+          </div>
+          <button type="submit" name="seleccionar_proxima" value="1" class="next-slot__btn">
+            Seleccionar
+          </button>
+        </div>
+        {% endif %}
+
+        {% with v=vista|default:"dia" %}
+        <!-- Tabs día / semana -->
+        <div class="tabs-horario" role="tablist" aria-label="Vistas">
+          <button type="submit" name="vista" value="dia"
+                  class="{% if v == 'dia' %}is-active{% endif %}"
+                  role="tab"
+                  aria-selected="{% if v == 'dia' %}true{% else %}false{% endif %}">
+            Vista por día
+          </button>
+
+          <button type="submit" name="vista" value="semana"
+                  class="{% if v == 'semana' %}is-active{% endif %}"
+                  role="tab"
+                  aria-selected="{% if v == 'semana' %}true{% else %}false{% endif %}">
+            Vista semanal
+          </button>
+        </div>
+
+        <!-- Cabecera de día con navegación -->
+        <div class="day-head">
+          <h3 class="day-title">{{ fecha_actual|default:"" }}</h3>
+          <div class="day-nav">
+            <button class="p-ghost" type="submit" name="nav" value="prev" aria-label="Día anterior">‹</button>
+            <button class="p-ghost" type="submit" name="nav" value="next" aria-label="Día siguiente">›</button>
+          </div>
+        </div>
+
+        <!-- Slots de horario -->
+        {% if v == 'dia' %}
+          <div class="slots-grid">
+            {% for slot in slots %}
+              {% if slot.disponible %}
+                <label class="slot">
+                  <input type="radio" name="slot" value="{{ slot.id }}" style="display:none"
+                         {% if slot.id == slot_id %}checked{% endif %}>
+                  {{ slot.hora }}
+                </label>
+              {% else %}
+                <div class="slot is-disabled">
+                  {{ slot.hora }} <small>Ocupado</small>
+                </div>
+              {% endif %}
+            {% empty %}
+              <p>No hay horarios disponibles para este día.</p>
+            {% endfor %}
+          </div>
+        {% else %}
+          <!-- Vista semanal -->
+          <div class="grid-slots">
+            {% for s in semana_slots %}
+              {% if s.disponible %}
+                <label class="slot">
+                  <input type="radio" name="slot" value="{{ s.id }}" style="display:none"
+                         {% if s.id == slot_id %}checked{% endif %}>
+                  {{ s.dia_corto }} {{ s.hora }}
+                </label>
+              {% else %}
+                <div class="slot is-disabled">
+                  {{ s.dia_corto }} {{ s.hora }} <small>Ocupado</small>
+                </div>
+              {% endif %}
+            {% empty %}
+              <p>No hay horarios disponibles esta semana.</p>
+            {% endfor %}
+          </div>
+        {% endif %}
+        {% endwith %}
+
+        <div class="navRow">
+          <a class="btn-ghost" href="{% url 'agenda:reservar' %}">
+            <span class="arr">‹</span> Anterior
+          </a>
+          <button class="btn-next" type="submit" name="continuar" value="1">
+            Siguiente <span class="arr">›</span>
+          </button>
+        </div>
+
+      </form>
+    </section>
+  </main>
+</div>
+{% endblock %}

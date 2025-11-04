@@ -1,0 +1,391 @@
+/* =========================================================
+   BASE DE LA PÁGINA (Agenda / Listado / Calendario)
+   ========================================================= */
+.page {
+    max-width: 1200px;
+    margin-inline: auto;
+    padding: 1.25rem;
+}
+
+.page-head {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.page-head h1 {
+    margin: 0;
+    font-size: 1.65rem;
+}
+
+.view-switch {
+    display: flex;
+    gap: .4rem;
+}
+
+.pill {
+    padding: .4rem .8rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 999px;
+    background: #fff;
+    color: #374151;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.pill.active {
+    background: #5213a1;
+    color: #fff;
+    border-color: transparent;
+}
+
+.head-actions {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+.with-plus {
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+}
+
+.with-plus span {
+    font-weight: 900;
+    font-size: 1.1rem;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #eef1f6;
+    border-radius: 16px;
+    box-shadow: 0 10px 24px rgba(17, 24, 39, .06);
+    padding: 1rem;
+}
+
+/* -------- Filtros (Agenda) -------- */
+.filters-title {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    margin: 0 0 .75rem;
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: .8rem;
+}
+
+.field label {
+    display: block;
+    font-size: .9rem;
+    color: #6b7280;
+    margin: 0 0 .25rem;
+}
+
+.select {
+    position: relative;
+}
+
+.select select {
+    width: 100%;
+    padding: .6rem .9rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #111827;
+    appearance: none;
+    background: #fff;
+}
+
+.select .chev {
+    position: absolute;
+    right: .7rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #6b7280;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+.stretch {
+    width: 100%;
+}
+
+/* -------- Encabezado Calendario -------- */
+.cal-head {
+    border-bottom: 1px dashed #eef1f6;
+    margin: -.2rem 0 1rem;
+    padding-bottom: .6rem;
+}
+
+#calTitle {
+    margin: 0;
+    font-size: 1rem;
+    color: #374151;
+}
+
+/* -------- Vista de Día (grid) -------- */
+.day-view {
+    --slot-h: 44px;
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 12px;
+}
+
+.hours {
+    display: grid;
+    grid-auto-rows: var(--slot-h);
+    color: #6b7280;
+    padding-top: 6px;
+}
+
+.hours .t {
+    font-size: .9rem;
+}
+
+.day-lane {
+    position: relative;
+    border-left: 1px dashed #e5e7eb;
+    padding-left: 8px;
+}
+
+/* Grid de 30' limpio (09:00–18:00 => 18 filas de 30 min) */
+#dayView .appts {
+    display: grid;
+    grid-template-rows: repeat(18, var(--slot-h, 44px));
+    gap: 6px;
+    list-style: none;
+    margin: 0;
+    padding: 0 8px 0 0;
+}
+
+/* Tarjeta de cita */
+#dayView .appt {
+    margin: 0;
+    background: #f5f7ff;
+    border: 2px solid #6d28d9;
+    border-radius: 10px;
+    padding: 10px 12px;
+}
+
+#dayView .appt .ttl {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+#dayView .appt .meta {
+    color: #6b7280;
+    font-size: .92rem;
+}
+
+/* Posicionamiento (fila inicio) */
+.r-1 {
+    grid-row-start: 1
+}
+
+.r-2 {
+    grid-row-start: 2
+}
+
+.r-3 {
+    grid-row-start: 3
+}
+
+.r-4 {
+    grid-row-start: 4
+}
+
+.r-5 {
+    grid-row-start: 5
+}
+
+.r-6 {
+    grid-row-start: 6
+}
+
+.r-7 {
+    grid-row-start: 7
+}
+
+.r-8 {
+    grid-row-start: 8
+}
+
+.r-9 {
+    grid-row-start: 9
+}
+
+.r-10 {
+    grid-row-start: 10
+}
+
+.r-11 {
+    grid-row-start: 11
+}
+
+.r-12 {
+    grid-row-start: 12
+}
+
+.r-13 {
+    grid-row-start: 13
+}
+
+.r-14 {
+    grid-row-start: 14
+}
+
+.r-15 {
+    grid-row-start: 15
+}
+
+.r-16 {
+    grid-row-start: 16
+}
+
+.r-17 {
+    grid-row-start: 17
+}
+
+.r-18 {
+    grid-row-start: 18
+}
+
+/* Span de duración (30' = 1, 60' = 2, etc.) */
+.s-1 {
+    grid-row-end: span 1
+}
+
+.s-2 {
+    grid-row-end: span 2
+}
+
+.s-3 {
+    grid-row-end: span 3
+}
+
+.s-4 {
+    grid-row-end: span 4
+}
+
+.s-5 {
+    grid-row-end: span 5
+}
+
+.s-6 {
+    grid-row-end: span 6
+}
+
+/* =========================================================
+   BOTONES – Únicos, reutilizables en toda la app
+   ========================================================= */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: .4rem;
+    padding: .6rem .9rem;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    font-weight: 800;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform .08s, filter .2s, border-color .15s, background .15s;
+}
+
+.btn:focus-visible {
+    outline: 3px solid rgba(82, 19, 161, .28);
+    outline-offset: 2px;
+}
+
+.btn-primary {
+    background: #5213a1;
+    color: #fff;
+    box-shadow: 0 8px 18px rgba(124, 58, 237, .25);
+}
+
+.btn-primary:hover {
+    filter: saturate(1.06);
+    transform: translateY(-1px);
+}
+
+.btn-light {
+    background: #f3f4f6;
+    color: #111;
+    border: 1px solid #e5e7eb;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: #fff;
+}
+
+/* ===== Paso 3 Reserva – Escopado a .rsv ===== */
+
+.rsv .container{max-width:980px;} /* más angosto */
+
+.rsv-head{margin:0 auto 10px;padding:8px 0}
+.rsv-head .steps{display:flex;gap:.5rem;align-items:center;font-weight:800;color:#6b7280}
+.rsv-head .step{display:inline-flex;align-items:center;gap:.4rem}
+.rsv-head .step>span{width:22px;height:22px;border-radius:999px;background:#efeafc;color:#5213a1;display:grid;place-items:center;font-size:.8rem}
+.rsv-head .step.done{color:#374151}
+.rsv-head .step.current{color:#111827}
+.rsv-head .meter{height:8px;background:#efeafc;border-radius:999px;overflow:hidden;margin:.35rem 0}
+.rsv-head .meter .bar{height:100%;background:#5213a1;border-radius:999px}
+.rsv-head .donepct{margin:0;color:#6b7280;font-size:.9rem}
+
+/* grid principal */
+.rsv .rsv-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px}
+@media (max-width:960px){.rsv .rsv-grid{grid-template-columns:1fr}}
+
+/* cards */
+.rsv .card{background:#fff;border:1px solid #eef1f6;border-radius:16px;box-shadow:0 10px 25px rgba(17,24,39,.08),0 4px 10px rgba(17,24,39,.05);padding:16px}
+
+/* títulos */
+.rsv .h-title{font-size:clamp(1.6rem,1.2rem + 1vw,2rem);margin:0 0 6px;font-weight:900}
+.rsv .h-lead{color:#6b7280;margin:0 0 16px}
+
+/* formulario */
+.rsv-form .fields{display:grid;gap:10px}
+.rsv-form .field>span{display:block;font-size:.85rem;font-weight:700;margin-bottom:6px;color:#111827}
+.rsv-form input,.rsv-form select,.rsv-form textarea{
+  width:100%;height:40px;box-sizing:border-box;padding:0 12px;border-radius:10px;
+  border:1px solid #e6e8ee;background:#fff;color:#111827;font-size:13px;transition:border-color .2s,box-shadow .2s
+}
+.rsv-form textarea{min-height:96px;padding:10px 12px;resize:vertical}
+.rsv-form input:hover,.rsv-form select:hover,.rsv-form textarea:hover{border-color:#d7dae3}
+.rsv-form input:focus,.rsv-form select:focus,.rsv-form textarea:focus{border-color:#5213A1;box-shadow:0 0 0 4px rgba(82,19,161,.14);outline:0}
+.rsv-form .hint{color:#6b7280;font-size:.9rem;margin-top:4px}
+
+/* acciones */
+.rsv-form .actions{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+.rsv .btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;height:42px;padding:.75rem 1rem;border-radius:12px;border:1px solid transparent;font-weight:800;text-decoration:none;cursor:pointer;transition:transform .08s,filter .2s,background .15s,border-color .15s}
+.rsv .btn-ghost{background:#fff;border-color:#e5e7eb;color:#111827}
+.rsv .btn-ghost:hover{background:#f9fafb}
+.rsv .btn-primary{background:#5213a1;color:#fff;box-shadow:0 8px 18px rgba(124,58,237,.25)}
+.rsv .btn-primary:hover{filter:saturate(1.06);transform:translateY(-1px)}
+.rsv .btn:focus-visible{outline:3px solid rgba(82,19,161,.28);outline-offset:2px}
+
+/* spinner botón */
+.rsv .spinner{width:18px;height:18px;display:none}
+.rsv .spinner circle{fill:none;stroke:#fff;stroke-width:3;opacity:.9}
+#submitBtn.is-loading .btn__text{opacity:0}
+#submitBtn.is-loading .spinner{display:block;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* resumen */
+.rsv-summary .card-title{margin:0 0 8px;font-weight:900;font-size:1.05rem}
+.rsv-summary .muted{color:#6b7280}
+.rsv-summary .sum-item{padding:8px 0;border-bottom:1px solid #f1f3f7}
+.rsv-summary .sum-split{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.rsv-summary .sum-line{display:flex;align-items:center;justify-content:space-between}
+.rsv-summary .sep{border:0;height:1px;background:#eceff5;margin:10px 0 12px}
+.rsv-summary .sum-total{display:flex;align-items:center;justify-content:space-between;font-weight:900}

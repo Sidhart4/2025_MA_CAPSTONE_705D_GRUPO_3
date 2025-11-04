@@ -1,0 +1,15 @@
+{% extends "main/base.html" %}
+{% block contenido %}
+<main class="page">
+  <div class="page-head"><h1>Eliminar cita</h1></div>
+  <section class="card">
+    <p>¿Eliminar la cita de <strong>{{ cita.mascota }}</strong> el
+       <strong>{{ cita.fecha|date:"d/m/Y" }}</strong> a las <strong>{{ cita.hora|time:"H:i" }}</strong>?</p>
+    <form method="post">
+      {% csrf_token %}
+      <button class="btn-primary danger" type="submit">Sí, eliminar</button>
+      <a class="btn-light" href="{% url 'agenda:lista' %}?mode=day&day={{ cita.fecha|date:'Y-m-d' }}">Cancelar</a>
+    </form>
+  </section>
+</main>
+{% endblock %}

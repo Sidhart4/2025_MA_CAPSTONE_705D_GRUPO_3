@@ -1,0 +1,102 @@
+{% extends "main/base.html" %}
+{% load static %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'main/css/contacto.css' %}">
+
+<main class="contact-wrap">
+    <!-- Encabezado -->
+    <header class="contact-hero">
+        <div class="hero-copy">
+            <h1>Contacto</h1>
+            <p class="sub">¿Tienes dudas o quieres reservar? Escríbenos y te respondemos.</p>
+        </div>
+        <div class="hero-meta">
+            <div class="pill">Tiempo de respuesta: 24–48h</div>
+        </div>
+    </header>
+
+    <!-- Contenedor -->
+    <section class="contact-card">
+        {% if enviado %}
+        <div class="alert success" role="status">
+            ¡Gracias! Tu mensaje fue enviado correctamente. Te contactaremos pronto.
+        </div>
+        {% endif %}
+        {% if messages %}
+        <ul class="msgs">
+            {% for m in messages %}<li class="{{ m.tags }}">{{ m }}</li>{% endfor %}
+        </ul>
+        {% endif %}
+        <form method="post" class="contact-grid" novalidate>
+            {% csrf_token %}
+
+            <!-- Nombre -->
+            <div class="field">
+                <label for="{{ form.nombre.id_for_label }}">Nombre</label>
+                {{ form.nombre }}
+                {% if form.nombre.errors %}<small class="err">{{ form.nombre.errors.0 }}</small>{% endif %}
+            </div>
+
+            <!-- Email -->
+            <div class="field">
+                <label for="{{ form.correo.id_for_label }}">Correo</label>
+                {{ form.correo }}
+                {% if form.email.errors %}<small class="err">{{ form.email.errors.0 }}</small>{% endif %}
+            </div>
+
+            <!-- Teléfono -->
+            <div class="field">
+                <label for="{{ form.telefono.id_for_label }}">Teléfono (opcional)</label>
+                {{ form.telefono }}
+                {% if form.telefono.errors %}<small class="err">{{ form.telefono.errors.0 }}</small>{% endif %}
+            </div>
+
+            <!-- Asunto -->
+            <div class="field">
+                <label for="{{ form.asunto.id_for_label }}">Asunto</label>
+                {{ form.asunto }}
+                {% if form.asunto.errors %}<small class="err">{{ form.asunto.errors.0 }}</small>{% endif %}
+            </div>
+
+            <!-- Mensaje (ocupa ancho completo) -->
+            <div class="field col-2">
+                <label for="{{ form.mensaje.id_for_label }}">Mensaje</label>
+                {{ form.mensaje }}
+                {% if form.mensaje.errors %}<small class="err">{{ form.mensaje.errors.0 }}</small>{% endif %}
+            </div>
+
+            <!-- Acepto -->
+            <div class="field agree col-2">
+                <label class="chk">
+                    {{ form.acepta }}
+                    <span>Acepto la <a href="#" target="_blank" rel="noopener">política de privacidad</a></span>
+                </label>
+                {% if form.acepta.errors %}<small class="err">{{ form.acepta.errors.0 }}</small>{% endif %}
+            </div>
+
+            <!-- Botones -->
+            <div class="actions col-2">
+                <button type="submit" class="btn-primary">Enviar</button>
+                <a href="{% url 'main:home' %}" class="btn-ghost">Volver al inicio</a>
+            </div>
+        </form>
+    </section>
+
+    <!-- Datos de contacto / mapa (opcional) -->
+    <section class="contact-extra">
+        <div class="card mini">
+            <h4>Teléfono</h4>
+            <a href="tel:+56912345678">+56 9 1234 5678</a>
+        </div>
+        <div class="card mini">
+            <h4>Correo</h4>
+            <a href="mailto:hola@akumanopet.cl">hola@akumanopet.cl</a>
+        </div>
+        <div class="card mini">
+            <h4>Dirección</h4>
+            <p>Av. Providencia 1234, Providencia, Santiago</p>
+        </div>
+    </section>
+</main>
+{% endblock %}

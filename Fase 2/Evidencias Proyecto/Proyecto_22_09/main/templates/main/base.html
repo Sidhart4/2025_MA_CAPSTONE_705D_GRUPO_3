@@ -1,0 +1,376 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Akuma no Pet{% endblock %}</title>
+  <meta name="description" content="Agenda tu cita veterinaria en 3 clics. Sistema de reservas con recordatorios automáticos por WhatsApp y correo." />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}?v=5">
+  
+  <link rel="stylesheet" href="{% static 'carrito/css/cart.css' %}?v=1"> 
+  
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+  <!-- ============ NAVBAR ============ -->
+  <header>
+    <div class="container nav" id="navbar">
+      <div class="brand">
+        <a href="{% url 'main:home' %}" class="logo" aria-label="Inicio Akuma no Pet">
+          <img src="{% static 'images/logo_transparente.png' %}" alt="Logo Akuma no Pet">
+        </a>
+        <a href="{% url 'main:home' %}" aria-label="Inicio Akuma no Pet">Akuma no Pet</a>
+      </div>
+
+      <nav class="menu" aria-label="Principal">
+        <a href="{% url 'main:home' %}">Inicio</a>
+        {% if user.is_authenticated and user.is_staff %}
+          <a href="{% url 'agenda:lista' %}">Agenda</a>
+        {% endif %}
+        <a href="{% url 'productos:lista' %}">Productos</a>
+        <a href="#equipo">Equipo</a>
+        <a href="#precios">Precios</a>
+        <a href="{% url 'main:contacto' %}">Contacto</a>
+      </nav>
+
+      <div class="actions">
+        {% if user.is_authenticated %}
+          <form method="post" action="{% url 'cuentas:logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{% url 'main:home' %}">
+            <button type="submit" class="btn-blanco-nav">Cerrar sesión</button>
+          </form>
+        {% else %}
+          <a href="{% url 'cuentas:login' %}" class="btn-blanco-nav" role="button">Iniciar sesión</a>
+        {% endif %}
+
+        <!-- Botón del carrito -->
+        <a href="#" class="btn-cart" id="navCartBtn" aria-label="Carrito ({{ cart_count|default:0 }})" title="Carrito">
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M6 6h14l-1.3 7.5a2 2 0 0 1-2 1.5H9.2a2 2 0 0 1-2-1.6L5.2 4.8H3"
+                  fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round" />
+            <circle cx="9" cy="20" r="1.5"></circle>
+            <circle cx="18" cy="20" r="1.5"></circle>
+          </svg>
+          <span class="cart-badge" data-cart-count>{{ cart_count|default:0 }}</span>
+        </a>
+
+        <a href="{% url 'agenda:reservar' %}" class="btn-morado-nav" role="button">Reservar Cita</a>
+        <button class="hamburger" id="btnMenu" aria-label="Abrir menú">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 6h18M3 12h18M3 18h18" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Panel móvil -->
+    <div class="mobile-panel" id="panelMovil" aria-label="Menú móvil">
+      <a href="#servicios">Servicios</a>
+      {% if user.is_authenticated and user.is_staff %}
+        <a href="{% url 'agenda:lista' %}">Agenda</a>
+      {% endif %}
+      <a href="{% url 'productos:lista' %}">Productos</a>
+      <a href="#equipo">Equipo</a>
+      <a href="#precios">Precios</a>
+      <a href="{% url 'main:contacto' %}">Contacto</a>
+
+      {% if user.is_authenticated %}
+        <form method="post" action="{% url 'cuentas:logout' %}">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{% url 'main:home' %}">
+          <button type="submit" class="link-like">Cerrar sesión</button>
+        </form>
+      {% else %}
+        <a href="{% url 'cuentas:login' %}">Iniciar sesión</a>
+      {% endif %}
+    </div>
+  </header>
+
+  {% block contenido %}{% endblock %}
+
+  <!-- ============== FOOTER ============== -->
+  <footer class="site-footer" id="footer">
+    <div class="container footer-grid">
+      <!-- Columna: marca -->
+      <section class="footer-brand">
+        <div class="brandline">
+          <span class="brand-badge" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l3 6 6 .9-4.5 4.2L17 20l-5-3-5 3 1.5-6.9L4 8.9 10 8l2-6z" fill="currentColor"/>
+            </svg>
+          </span>
+          <strong class="brand-name">Akuma no Pet</strong>
+        </div>
+        <p class="footer-lead">
+          Cuidado veterinario integral, reservas online y recordatorios automáticos. Tu mascota, en buenas manos.
+        </p>
+        <div class="footer-actions" role="group" aria-label="Redes sociales">
+          <a class="fbtn" href="#" aria-label="Instagram">
+            <svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm5 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm6.5-.9a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2z" fill="currentColor"/></svg>
+          </a>
+          <a class="fbtn" href="#" aria-label="Facebook">
+            <svg viewBox="0 0 24 24"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v3H8v3h3v6h3v-6h3l1-3h-4V9c0-.6.4-1 1-1z" fill="currentColor"/></svg>
+          </a>
+          <a class="fbtn" href="#" aria-label="WhatsApp">
+            <svg viewBox="0 0 24 24"><path d="M20 3.9A10 10 0 0 0 3.6 17.6L3 21l3.4-.6A10 10 0 1 0 20 3.9zm-8 16a8 8 0 0 1-4.1-1.1l-.3-.2-2.4.4.4-2.3-.2-.4A8 8 0 1 1 12 19.9zm4-4.2c-.2-.1-1.3-.6-1.5-.7-.2-.1-.4-.1-.6.1-.2.2-.7.7-.8.9-.1.2-.3.2-.6.1-1.6-.8-2.8-2.2-3.2-3.1-.1-.2 0-.4.1-.5.1-.1.2-.3.3-.4.1-.1.1-.2.2-.3.1-.1.1-.2.2-.3.1-.1.1-.2 0-.4-.1-.2-.6-1.4-.8-1.8-.2-.4-.4-.4-.6-.4h-.5c-.2 0-.4.2-.6.4-.2.2-.8.8-.8 2s.8 2.3.9 2.4c.1.2 1.6 2.5 3.8 3.5.5.2.9.3 1.2.4.5.2 1 .2 1.3.1.4-.1 1.3-.5 1.5-1 .2-.5.2-.9.2-1 0-.1-.2-.1-.3-.2z" fill="currentColor"/></svg>
+          </a>
+        </div>
+      </section>
+
+      <!-- Columna: enlaces -->
+      <section class="footer-col">
+        <h4>Enlaces</h4>
+        <ul class="icon-list">
+          <li><span class="i">•</span><a href="{% url 'main:home' %}">Inicio</a></li>
+          <li><span class="i">•</span><a href="{% url 'productos:lista' %}">Productos</a></li>
+          <li><span class="i">•</span><a href="{% url 'agenda:reservar' %}">Reservar cita</a></li>
+          <li><span class="i">•</span><a href="{% url 'main:contacto' %}">Contacto</a></li>
+        </ul>
+      </section>
+
+      <!-- Columna: contacto -->
+      <section class="footer-col">
+        <h4>Contacto</h4>
+        <ul class="icon-list">
+          <li><span class="i">📍</span>Av. Siempre Viva 123, Stgo.</li>
+          <li><span class="i">✉️</span><a href="mailto:contacto@akumanopet.cl">contacto@akumanopet.cl</a></li>
+          <li><span class="i">📞</span><a href="tel:+56912345678">+56 9 1234 5678</a></li>
+          <li><span class="i">⏰</span>Lun–Sáb, 9:00–19:00</li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="container footer-bottom">
+      <p>© {{ now|date:"Y" }} Akuma no Pet. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- ============== DRAWER DEL CARRITO (ÚNICO) ============== -->
+  <div id="cartDrawer" class="cart-drawer" aria-hidden="true" hidden>
+    <div id="cartBackdrop" class="cart-drawer__backdrop" data-close-drawer aria-hidden="true"></div>
+    <aside class="cart-drawer__panel" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+      <div id="cartDrawerMount" class="cart-drawer__mount"><!-- aquí se inyecta _mini.html --></div>
+    </aside>
+  </div>
+
+  <style>
+    .link-like{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;}
+    .cart-drawer[hidden]{display:none;}
+  </style>
+
+  <!-- ============== JS NAV (móvil) + CARRITO ============== -->
+<script>
+// Toggle menú móvil
+(function(){
+  const btn = document.getElementById('btnMenu');
+  const panel = document.getElementById('panelMovil');
+  if(btn && panel){
+    btn.addEventListener('click', ()=> {
+      panel.classList.toggle('mobile-open');
+    });
+  }
+})();
+
+(function () {
+  // === CSRF ===
+  function getCookie(name){
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== ''){
+      const cookies = document.cookie.split(';');
+      for (let c of cookies){
+        c = c.trim();
+        if (c.substring(0, name.length + 1) === (name + '=')){
+          cookieValue = decodeURIComponent(c.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  const csrftoken = getCookie('csrftoken');
+
+  // === Utilidades ===
+  const fmt = new Intl.NumberFormat('es-CL', { style:'currency', currency:'CLP', maximumFractionDigits:0 });
+
+  const drawer   = document.getElementById('cartDrawer');
+  const backdrop = document.getElementById('cartBackdrop');
+  const mount    = document.getElementById('cartDrawerMount');
+  const openBtn  = document.getElementById('navCartBtn');
+
+  function openDrawer(){
+    const panel = drawer?.querySelector('.cart-drawer__panel');
+    if (!drawer || !panel) return;
+
+    drawer.hidden = false;
+    drawer.setAttribute('aria-hidden','false');
+
+    // Compatibilidad: clase en wrapper + en panel
+    drawer.classList.add('is-open');
+    requestAnimationFrame(()=> panel.classList.add('is-open'));
+  }
+
+  function closeDrawer(){
+    const panel = drawer?.querySelector('.cart-drawer__panel');
+    if (!drawer || !panel) return;
+
+    panel.classList.remove('is-open');
+    drawer.classList.remove('is-open');
+
+    // Espera el fin de la transición del panel para ocultar el DOM
+    const onEnd = (e)=>{
+      if (e.propertyName !== 'transform') return;
+      drawer.setAttribute('aria-hidden','true');
+      drawer.hidden = true;
+      panel.removeEventListener('transitionend', onEnd);
+    };
+    // Fallback por si no dispara transitionend (por ejemplo, estilos desactivados)
+    const fallback = setTimeout(()=>{
+      drawer.setAttribute('aria-hidden','true');
+      drawer.hidden = true;
+      panel.removeEventListener('transitionend', onEnd);
+    }, 320);
+
+    panel.addEventListener('transitionend', (e)=>{ clearTimeout(fallback); onEnd(e); }, { once:true });
+  }
+
+  function updateCartCounter(count, total){
+    const elCount = document.querySelector('[data-cart-count]');
+    const elTotal = document.querySelector('[data-cart-total]');
+    if (elCount) elCount.textContent = count;
+    if (elTotal) elTotal.textContent = fmt.format(total);
+  }
+
+  async function fetchMini(){
+    try{
+      const res = await fetch("{% url 'carrito:mini' %}", { headers:{'X-Requested-With':'XMLHttpRequest'} });
+      const data = await res.json();
+      if(data.ok){
+        mount.innerHTML = data.html;  // _mini.html completo
+        attachDrawerHandlers();
+        updateCartCounter(data.count, data.total);
+      }
+    }catch(e){ console.error(e); }
+  }
+
+  // Abre desde el icono del nav
+  openBtn?.addEventListener('click', async (e)=>{
+    e.preventDefault();
+    await fetchMini();
+    openDrawer();
+  });
+
+  // Cerrar por backdrop o tecla ESC
+  backdrop?.addEventListener('click', closeDrawer);
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeDrawer(); });
+
+  function attachDrawerHandlers(){
+    // Cerrar dentro del parcial
+    mount.querySelectorAll('[data-close-drawer], .cart-drawer__close')?.forEach(btn=>{
+      btn.addEventListener('click', closeDrawer);
+    });
+
+    // Controles +/- y eliminar
+    mount.querySelectorAll('.cart-drawer__item')?.forEach((li)=>{
+      const id = li.getAttribute('data-id');
+
+      li.querySelectorAll('[data-update]')?.forEach(btn=>{
+        btn.addEventListener('click', async ()=>{
+          const delta = btn.getAttribute('data-update') === '+1' ? 1 : -1;
+          const qtyEl = li.querySelector('.cart-drawer__qty');
+          const newQty = Math.max(1, (parseInt(qtyEl.textContent||'1',10) + delta));
+          const body = new URLSearchParams({ qty:String(newQty) });
+          const res = await fetch("{% url 'carrito:update' 0 %}".replace('/0/','/'+id+'/'), {
+            method:'POST',
+            headers:{ 'X-Requested-With':'XMLHttpRequest','X-CSRFToken':csrftoken,'Content-Type':'application/x-www-form-urlencoded' },
+            body: body.toString()
+          });
+          const data = await res.json();
+          if(data.ok){
+            mount.innerHTML = data.html;
+            updateCartCounter(data.count, data.total);
+            attachDrawerHandlers();
+          }
+        });
+      });
+
+      li.querySelector('[data-remove]')?.addEventListener('click', async ()=>{
+        const res = await fetch("{% url 'carrito:remove' 0 %}".replace('/0/','/'+id+'/'), {
+          method:'POST',
+          headers:{ 'X-Requested-With':'XMLHttpRequest','X-CSRFToken':csrftoken }
+        });
+        const data = await res.json();
+        if(data.ok){
+          mount.innerHTML = data.html;
+          updateCartCounter(data.count, data.total);
+          attachDrawerHandlers();
+        }
+      });
+    });
+  }
+
+  // “Agregar al carrito” en tarjetas de producto (usa data-add-to-cart)
+  document.addEventListener('click', async function (e) {
+    const btn = e.target.closest('[data-add-to-cart]');
+    if (!btn) return;
+    e.preventDefault();
+
+    const productId  = btn.getAttribute('data-id');
+    const postUrl    = btn.getAttribute('data-url'); // opcional: URL exacta en data-url
+    const qtySel     = btn.getAttribute('data-qty-selector');
+
+    let qty = 1;
+    if (qtySel){
+      const inpt = document.querySelector(qtySel);
+      if (inpt && inpt.value) qty = parseInt(inpt.value, 10) || 1;
+    }
+
+    try {
+      const url = postUrl || (`/carrito/add/${productId}/`);
+      const body = new URLSearchParams({ qty:String(qty), override:'0' });
+
+      const res = await fetch(url, {
+        method:'POST',
+        headers:{
+          'X-Requested-With':'XMLHttpRequest',
+          'X-CSRFToken': csrftoken,
+          'Content-Type':'application/x-www-form-urlencoded'
+        },
+        body: body.toString()
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        alert((data && data.message) || 'No se pudo agregar al carrito.');
+        return;
+      }
+
+      // Actualiza badge y muestra drawer (usando html devuelto o refrescando mini)
+      updateCartCounter(data.cart.count, data.cart.total);
+      if (data.html){
+        mount.innerHTML = data.html;
+        attachDrawerHandlers();
+      } else {
+        await fetchMini();
+      }
+      openDrawer();
+
+    } catch (err) {
+      console.error(err);
+      alert('Error de red al agregar al carrito.');
+    }
+  });
+
+})();
+</script>
+
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

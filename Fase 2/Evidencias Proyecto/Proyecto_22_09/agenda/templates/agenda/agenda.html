@@ -1,0 +1,175 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% now "Y-m-d" as today %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'agenda/css/agenda.css' %}">
+
+<main class="page">
+  <div class="page-head">
+    <h1>Agenda</h1>
+
+    <div class="view-switch">
+      <a id="btnDia" class="pill {% if mode == 'day' %}active{% endif %}"
+         href="{% url 'agenda:lista' %}?mode=day&day={{ current_day|date:'Y-m-d' }}{% if pro_id %}&pro={{ pro_id }}{% endif %}{% if srv_id %}&srv={{ srv_id }}{% endif %}">
+        Día
+      </a>
+      <a id="btnSemana" class="pill {% if mode == 'week' %}active{% endif %}"
+         href="{% url 'agenda:lista' %}?mode=week&day={{ current_day|date:'Y-m-d' }}{% if pro_id %}&pro={{ pro_id }}{% endif %}{% if srv_id %}&srv={{ srv_id }}{% endif %}">
+        Semana
+      </a>
+    </div>
+
+    <div class="head-actions">
+      {% if mode == 'day' %}
+        <a id="prevDay" class="btn-icon" aria-label="Anterior"
+           href="{% url 'agenda:lista' %}?mode=day&day={{ prev_day }}{% if pro_id %}&pro={{ pro_id }}{% endif %}{% if srv_id %}&srv={{ srv_id }}{% endif %}">‹</a>
+        <a id="today" class="btn-light"
+           href="{% url 'agenda:lista' %}?mode=day&day={{ today }}{% if pro_id %}&pro={{ pro_id }}{% endif %}{% if srv_id %}&srv={{ srv_id }}{% endif %}">Hoy</a>
+        <a id="nextDay" class="btn-icon" aria-label="Siguiente"
+           href="{% url 'agenda:lista' %}?mode=day&day={{ next_day }}{% if pro_id %}&pro={{ pro_id }}{% endif %}{% if srv_id %}&srv={{ srv_id }}{% endif %}">›</a>
+      {% else %}
+        <a class="btn-icon" aria-label="Semana anterior"
+           href="{% url 'agenda:lista' %}?mode=week&day={{ prev_week }}{% if pro_id %}&pro={{ pro_id }}{% endif %}{% if srv_id %}&srv={{ srv_id }}{% endif %}">‹</a>
+        <a class="btn-light"
+           href="{% url 'agenda:lista' %}?mode=week&day={{ today }}{% if pro_id %}&pro={{ pro_id }}{% endif %}{% if srv_id %}&srv={{ srv_id }}{% endif %}">Hoy</a>
+        <a class="btn-icon" aria-label="Semana siguiente"
+           href="{% url 'agenda:lista' %}?mode=week&day={{ next_week }}{% if pro_id %}&pro={{ pro_id }}{% endif %}{% if srv_id %}&srv={{ srv_id }}{% endif %}">›</a>
+      {% endif %}
+
+      <a id="newAppt" class="btn-primary with-plus" href="{% url 'agenda:crear' %}">
+        <span>+</span> Nueva Cita
+      </a>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <section class="filters card">
+    <h3 class="filters-title">
+      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+        <path d="M3 5h18M6 12h12M10 19h4" fill="none" stroke="currentColor" stroke-width="2"/>
+      </svg>
+      Filtros
+    </h3>
+
+    <form class="filters-grid" method="get" action="{% url 'agenda:lista' %}">
+      <input type="hidden" name="mode" value="{{ mode }}">
+      <input type="hidden" name="day" value="{{ current_day|date:'Y-m-d' }}">
+
+      <div class="field">
+        <label for="selPro">Profesional</label>
+        <div class="select">
+          <select id="selPro" name="pro">
+            <option value="">Todos los profesionales</option>
+            {% for p in pros %}
+              <option value="{{ p.id }}" {% if pro_id|add:'' == p.id|stringformat:'s' %}selected{% endif %}>{{ p.nombre }}</option>
+            {% endfor %}
+          </select>
+          <span class="chev">▾</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="selSrv">Servicio</label>
+        <div class="select">
+          <select id="selSrv" name="srv">
+            <option value="">Todos los servicios</option>
+            {% for s in servicios %}
+              <option value="{{ s.id }}" {% if srv_id|add:'' == s.id|stringformat:'s' %}selected{% endif %}>{{ s.nombre }}</option>
+            {% endfor %}
+          </select>
+          <span class="chev">▾</span>
+        </div>
+      </div>
+
+      <div class="field full">
+        <button id="clearFilters" class="btn-light stretch" type="submit">Limpiar Filtros</button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Calendario -->
+  <section class="calendar card">
+    <header class="cal-head">
+      {% if mode == 'day' %}
+        <h4 id="calTitle">Citas — {{ current_day|date:"l, j \\d\\e F \\d\\e Y" }}</h4>
+      {% else %}
+        <h4 id="calTitle">
+          Semana
+          {% if days and days|length %}
+            {% with first=days.0 last=days|last %}
+              — {{ first.date|date:"d/m" }} a {{ last.date|date:"d/m/Y" }}
+            {% endwith %}
+          {% endif %}
+        </h4>
+      {% endif %}
+    </header>
+
+    <!-- Vista Día (grid) -->
+    <div id="dayView" class="day-view {% if mode != 'day' %}hidden{% endif %}">
+      <aside class="hours" id="hoursCol">
+        {% for h in hours %}<div class="t">{{ h }}</div>{% endfor %}
+      </aside>
+
+      <div class="day-lane">
+        {% if not citas %}
+          <div id="emptyState" class="empty">
+            <svg viewBox="0 0 24 24" width="42" height="42" aria-hidden="true">
+              <rect x="4" y="5" width="16" height="14" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/>
+              <path d="M8 3v4M16 3v4M4 10h16" fill="none" stroke="currentColor" stroke-width="1.8"/>
+            </svg>
+            <p>No hay citas programadas para este día</p>
+          </div>
+        {% endif %}
+
+        <!-- GRID 9:00–18:00 en bloques de 30' -->
+        <ul id="apptList" class="appts"
+            style="display:grid; grid-template-rows: repeat({{ rows }}, var(--slot-h, 44px)); gap:6px; margin:0; padding:0 8px 0 0;">
+          {% for c in citas %}
+            <li class="appt" style="grid-row: {{ c.row }} / span {{ c.span }};">
+              <div class="ttl">{{ c.mascota }}</div>
+              <div class="meta">
+                {{ c.hora|time:"H:i" }} · {{ c.servicio.nombre }} · {{ c.profesional.nombre }}
+              </div>
+
+              <!-- Botones de acción -->
+              <div class="appt-actions">
+                <a class="btn-mini" href="{% url 'agenda:detalle' c.id %}">Ver</a>
+                <a class="btn-mini warn" href="{% url 'agenda:editar' c.id %}">Editar</a>
+                <form method="post" action="{% url 'agenda:borrar' c.id %}" class="inline-del">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-mini danger"
+                          onclick="return confirm('¿Eliminar esta cita?');">Eliminar</button>
+                </form>
+              </div>
+            </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Vista Semana -->
+    <div id="weekView" class="week-view {% if mode != 'week' %}hidden{% endif %}">
+      <div class="week-grid" id="weekGrid">
+        {% for d in days %}
+          <div class="day-card">
+            <div class="hd">
+              <span class="d">{{ d.date|date:"D d/m" }}</span>
+              {% if d.items|length %}<span class="badge">{{ d.items|length }}</span>{% endif %}
+            </div>
+            <ul>
+              {% if d.items %}
+                {% for c in d.items %}
+                  <li>{{ c.hora|time:"H:i" }} — {{ c.mascota }}</li>
+                {% endfor %}
+              {% else %}
+                <li class="muted">Sin citas</li>
+              {% endif %}
+            </ul>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+</main>
+{% endblock %}

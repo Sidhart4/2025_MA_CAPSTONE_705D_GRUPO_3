@@ -1,0 +1,85 @@
+{% extends "main/base.html" %}
+{% load static humanize %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'agenda/css/reserva.css' %}">
+
+<div class="page-reserva">
+  <!-- HERO -->
+  <section class="hero-agenda">
+    <h1>Reserva tu cita en 3 simples pasos</h1>
+    <p>Agenda la atención veterinaria que tu mascota necesita de forma rápida y sencilla</p>
+
+    <div class="steps" aria-hidden="true">
+      <div class="step">
+        <div class="chip"><span class="i">📅</span></div>
+        <h3>1. Elige el servicio</h3>
+        <p>Selecciona el tipo de atención que necesita tu mascota</p>
+      </div>
+      <div class="step">
+        <div class="chip"><span class="i">⏱️</span></div>
+        <h3>2. Fecha y hora</h3>
+        <p>Escoge el horario que se ajuste a tu agenda</p>
+      </div>
+      <div class="step">
+        <div class="chip"><span class="i">✅</span></div>
+        <h3>3. Confirmación</h3>
+        <p>Confirma tu cita en un click</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WIZARD -->
+  <main class="wizard">
+    <!-- BARRA CENTRADA -->
+    <header class="progress-row" aria-label="Progreso">
+      <span class="step-label">Paso {{ step|default:1 }} de {{ total_steps|default:3 }}</span>
+
+      <div class="progress" role="progressbar"
+           aria-valuemin="0" aria-valuemax="100"
+           aria-valuenow="{{ percent|default:33 }}">
+        <div class="bar" style="width: {{ percent|default:33 }}%"></div>
+      </div>
+
+      <span class="pct">{{ percent|default:33 }}% completado</span>
+    </header>
+
+    <section class="stage" aria-labelledby="titleServicios">
+      <h2 id="titleServicios">Selecciona el servicio</h2>
+      <p class="lead">Elige el tipo de atención que necesita tu mascota</p>
+
+      <form method="post">
+        {% csrf_token %}
+
+        <div class="service-grid">
+          {% for s in servicios %}
+            <label class="card">
+              <input type="radio" name="servicio" value="{{ s.id }}" style="display:none"
+                     {% if form.initial.servicio == s.id %}checked{% endif %}>
+              <div class="card-head">
+                <div class="badge"><span class="dot"></span><span>{{ s.duracion_min_default|default:30 }} min</span></div>
+                <div aria-hidden="true" style="font-size:22px">{{ s.icono|default:"🐾" }}</div>
+              </div>
+              <h3 class="title">{{ s.nombre }}</h3>
+              {% if s.descripcion %}<p class="desc">{{ s.descripcion }}</p>{% endif %}
+              <div class="price">{% if s.precio %}${{ s.precio|intcomma }}{% else %}Sin costo{% endif %}</div>
+              <span class="select-btn">Seleccionar</span>
+            </label>
+          {% empty %}
+            <p>No hay servicios configurados.</p>
+          {% endfor %}
+        </div>
+
+        {% if form.servicio.errors %}
+          <p class="err" style="margin-top:6px;color:#b91c1c">{{ form.servicio.errors.0 }}</p>
+        {% endif %}
+
+        <div class="navRow">
+          <a class="btn-ghost" href="{% url 'main:home' %}"><span class="arr">‹</span> Volver</a>
+          <button class="btn-next enabled" type="submit">Siguiente <span class="arr">›</span></button>
+        </div>
+      </form>
+    </section>
+  </main>
+</div>
+{% endblock %}

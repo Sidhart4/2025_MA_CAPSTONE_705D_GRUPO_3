@@ -1,0 +1,48 @@
+{% extends "main/base.html" %}
+{% load static humanize %}
+
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'agenda/css/agenda.css' %}">
+<main class="container" style="max-width:980px; padding:32px 0 64px">
+  <section class="card" style="padding:20px">
+    <header style="display:flex; align-items:center; gap:.75rem; margin-bottom:12px;">
+      <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+        <circle cx="12" cy="12" r="10" fill="#16a34a"></circle>
+        <path d="M7 12.5l3 3 7-7" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h1 style="margin:0; font-size:1.5rem; font-weight:900;">¡Reserva confirmada!</h1>
+    </header>
+
+    <p style="margin:.25rem 0 1rem; color:#6b7280;">
+      Te enviamos la confirmación a tu correo{% if cita.email %} <strong>{{ cita.email }}</strong>{% endif %}.
+      Si necesitas reprogramar, puedes hacerlo hasta 12 horas antes.
+    </p>
+
+    <div class="card" style="padding:16px; margin-bottom:16px;">
+      <h3 class="card-title" style="margin:0 0 .5rem; font-weight:900;">Resumen</h3>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <div><span style="color:#6b7280;">Servicio</span><br><strong>{{ cita.servicio.nombre }}</strong></div>
+        <div><span style="color:#6b7280;">Duración</span><br><strong>{{ cita.servicio.duracion_min_default|default:30 }} min</strong></div>
+        <div><span style="color:#6b7280;">Fecha</span><br><strong>{{ cita.fecha }}</strong></div>
+        <div><span style="color:#6b7280;">Hora</span><br><strong>{{ cita.hora }} hrs</strong></div>
+        <div><span style="color:#6b7280;">Profesional</span><br>
+          <strong>{{ cita.profesional|default:"Cualquier profesional disponible" }}</strong>
+        </div>
+        <div><span style="color:#6b7280;">Total</span><br>
+          <strong>{% if cita.servicio.precio %}${{ cita.servicio.precio|intcomma }}{% else %}—{% endif %}</strong>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex; gap:.6rem; flex-wrap:wrap;">
+      <a class="btn btn-primary" href="{% url 'main:home' %}">Volver al inicio</a>
+      <a class="btn btn-light" href="{% url 'agenda:reservar' %}">Agendar otra cita</a>
+      <a class="btn btn-light" href="{% url 'productos:lista' %}">Ver productos</a>
+    
+    </div>
+
+    
+  </section>
+</main>
+{% endblock %}

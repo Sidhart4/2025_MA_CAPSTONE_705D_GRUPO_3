@@ -1,0 +1,455 @@
+{% extends 'main/base.html' %}
+{% load static %}
+
+{% block contenido %}
+
+<link rel="stylesheet" href="{% static 'cuentas/css/perfil.css' %}">
+
+<main class="perfil-wrapper container">
+  <section class="perfil-hero">
+    <div>
+      <p class="perfil-eyebrow">Panel personal</p>
+      <h1>Hola, {{ request.user.first_name|default:request.user.username }}</h1>
+      <p class="perfil-lead">
+        Desde aquí puedes actualizar tu contraseña, revisar el estado de tus citas y guardar fotos de tus mascotas.
+      </p>
+    </div>
+    <div class="perfil-stats">
+      <div class="stat">
+        <span class="stat-label">Próximas citas</span>
+        <strong class="stat-value">{{ citas_pendientes|length }}</strong>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Citas pasadas</span>
+        <strong class="stat-value">{{ citas_pasadas|length }}</strong>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Mascotas guardadas</span>
+        <strong class="stat-value">{{ mascotas|length }}</strong>
+      </div>
+    </div>
+  </section>
+
+  {% if messages %}
+  <div class="perfil-messages">
+    {% for message in messages %}
+      <div class="alert {{ message.tags|default:'info' }}">{{ message }}</div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <section class="perfil-grid">
+    <article class="card password-card">
+      <h2>Actualizar contraseña</h2>
+      <p>Elige una contraseña segura de al menos 8 caracteres.</p>
+      <form method="post" novalidate id="passwordForm" data-code-url="{% url 'cuentas:codigo_password' %}">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="password">
+        <input type="hidden" name="security_code" id="securityCodeField">
+        {% for field in password_form %}
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            <small class="error">{{ field.errors|join:", " }}</small>
+          {% endif %}
+        {% endfor %}
+        {% if password_form.non_field_errors %}
+          <small class="error">{{ password_form.non_field_errors|join:", " }}</small>
+        {% endif %}
+        <p class="password-card__status" id="passwordClientStatus" role="status"></p>
+        <button type="button" class="btn-primary" id="passwordModalTrigger">Guardar contraseña</button>
+      </form>
+    </article>
+
+    <article class="card citas-card">
+      <div class="citas-heading">
+        <h2>Tus citas</h2>
+        <a class="link" href="{% url 'agenda:reservar' %}">Reservar nueva</a>
+      </div>
+      <div class="tabs">
+        <button type="button" data-tab="pendientes" class="tab active">Pendientes ({{ citas_pendientes|length }})</button>
+        <button type="button" data-tab="pasadas" class="tab">Pasadas ({{ citas_pasadas|length }})</button>
+      </div>
+      <div class="tab-content active" id="tab-pendientes">
+        {% if citas_pendientes %}
+          {% for item in citas_pendientes %}
+            {% with cita=item.cita inicio=item.inicio %}
+              <article class="cita-item pendiente">
+                <div class="cita-date">
+                  <span class="day">{{ inicio|date:"d" }}</span>
+                  <span class="month">{{ inicio|date:"M" }}</span>
+                  <span class="time">{{ inicio|date:"H:i" }}</span>
+                </div>
+                <div class="cita-info">
+                  <p class="cita-service">{{ cita.servicio.nombre }}</p>
+                  <p class="cita-meta">
+                    Profesional: {{ cita.profesional.nombre }} • Mascota: {{ cita.mascota }}
+                  </p>
+                </div>
+                <span class="badge badge-pendiente">Pendiente</span>
+              </article>
+            {% endwith %}
+          {% endfor %}
+        {% else %}
+          <p class="empty">No tienes citas pendientes.</p>
+        {% endif %}
+      </div>
+      <div class="tab-content" id="tab-pasadas">
+        {% if citas_pasadas %}
+          {% for item in citas_pasadas %}
+            {% with cita=item.cita inicio=item.inicio %}
+              <article class="cita-item pasada">
+                <div class="cita-date">
+                  <span class="day">{{ inicio|date:"d" }}</span>
+                  <span class="month">{{ inicio|date:"M" }}</span>
+                  <span class="time">{{ inicio|date:"H:i" }}</span>
+                </div>
+                <div class="cita-info">
+                  <p class="cita-service">{{ cita.servicio.nombre }}</p>
+                  <p class="cita-meta">
+                    Profesional: {{ cita.profesional.nombre }} • Mascota: {{ cita.mascota }}
+                  </p>
+                </div>
+                <span class="badge badge-pasada">Finalizada</span>
+              </article>
+            {% endwith %}
+          {% endfor %}
+        {% else %}
+          <p class="empty">Aún no tienes citas anteriores.</p>
+        {% endif %}
+      </div>
+    </article>
+  </section>
+
+  <section class="mascotas-grid">
+    <article class="card mascotas-list">
+      <div class="section-head">
+        <h2>Mis mascotas</h2>
+        <p>Sube una foto para tenerlas siempre presentes.</p>
+      </div>
+
+      {% if mascotas %}
+        <div class="pet-gallery">
+          {% for mascota in mascotas %}
+            <div class="pet-card">
+              {% if mascota.foto %}
+                <img src="{{ mascota.foto.url }}" alt="Foto de {{ mascota.nombre }}">
+              {% else %}
+                <div class="pet-initial">{{ mascota.nombre|slice:":1" }}</div>
+              {% endif %}
+              <div class="pet-info">
+                <strong>{{ mascota.nombre }}</strong>
+                <span>{{ mascota.get_especie_display }}{% if mascota.raza %} • {{ mascota.raza }}{% endif %}</span>
+                {% if mascota.notas %}<p>{{ mascota.notas }}</p>{% endif %}
+                <form method="post" action="{% url 'cuentas:mascota_eliminar' mascota.pk %}">
+                  {% csrf_token %}
+                  <button type="submit" class="link danger">Eliminar</button>
+                </form>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="empty">Aún no agregas mascotas. Usa el formulario para comenzar.</p>
+      {% endif %}
+    </article>
+
+    <article class="card mascotas-form">
+      <h2>Agregar mascota</h2>
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="mascota">
+        {% for field in mascota_form %}
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.help_text %}
+            <small>{{ field.help_text }}</small>
+          {% endif %}
+          {% if field.errors %}
+            <small class="error">{{ field.errors|join:", " }}</small>
+          {% endif %}
+        {% endfor %}
+        <button type="submit" class="btn-primary">Guardar mascota</button>
+      </form>
+    </article>
+  </section>
+</main>
+
+<div class="password-modal" id="passwordModal" hidden aria-hidden="true">
+  <div class="password-modal__backdrop" data-modal-close></div>
+  <div class="password-modal__panel" role="dialog" aria-modal="true" aria-labelledby="passwordModalTitle">
+    <h3 id="passwordModalTitle">Confirma tu cambio</h3>
+    <p>Por seguridad, enviaremos un código a <strong>{{ request.user.email|default:"tu correo registrado" }}</strong>. Ingresa el código para completar el cambio.</p>
+    <div class="password-modal__code-row">
+      <div class="password-modal__code-grid" id="codeInputGrid" aria-label="Ingresa el código de seguridad">
+        {% for _ in "123456" %}
+        <input type="text" inputmode="numeric" pattern="[0-9]*" maxlength="1" class="code-digit" data-code-digit="{{ forloop.counter0 }}" aria-label="Dígito {{ forloop.counter }}" autocomplete="one-time-code">
+        {% endfor %}
+      </div>
+      <button type="button" class="btn-secondary" id="sendCodeBtn">Reenviar código</button>
+    </div>
+    <p class="password-modal__status" id="passwordModalStatus" role="status"></p>
+    <div class="password-modal__actions">
+      <button type="button" class="btn-ghost" data-modal-close>Cancelar</button>
+      <button type="button" class="btn-primary" id="confirmPasswordBtn">Confirmar cambio</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  document.querySelectorAll('.tabs .tab').forEach((button) => {
+    button.addEventListener('click', () => {
+      const wrapper = button.closest('.citas-card');
+      wrapper.querySelectorAll('.tabs .tab').forEach((btn) => btn.classList.remove('active'));
+      wrapper.querySelectorAll('.tab-content').forEach((tab) => tab.classList.remove('active'));
+
+      button.classList.add('active');
+      const target = wrapper.querySelector(`#tab-${button.dataset.tab}`);
+      if (target) target.classList.add('active');
+    });
+  });
+
+  const form = document.getElementById('passwordForm');
+  const trigger = document.getElementById('passwordModalTrigger');
+  const modal = document.getElementById('passwordModal');
+  const hiddenField = document.getElementById('securityCodeField');
+  const sendCodeBtn = document.getElementById('sendCodeBtn');
+  const confirmBtn = document.getElementById('confirmPasswordBtn');
+  const statusEl = document.getElementById('passwordModalStatus');
+  const clientStatus = document.getElementById('passwordClientStatus');
+  const codeInputs = Array.from(modal?.querySelectorAll('[data-code-digit]') || []);
+  const codeUrl = form?.dataset.codeUrl;
+
+  if (!form || !trigger || !modal || !hiddenField || !confirmBtn || codeInputs.length === 0) {
+    return;
+  }
+
+  const passwordFields = {
+    current: form.querySelector('#id_old_password'),
+    new1: form.querySelector('#id_new_password1'),
+    new2: form.querySelector('#id_new_password2'),
+  };
+
+  const enhancePasswordInputs = () => {
+    form.querySelectorAll('input[type="password"]').forEach((input) => {
+      if (input.closest('.password-input')) return;
+      const wrap = document.createElement('div');
+      wrap.className = 'password-input';
+      input.parentNode.insertBefore(wrap, input);
+      wrap.appendChild(input);
+
+      const toggle = document.createElement('button');
+      toggle.type = 'button';
+      toggle.className = 'password-input__toggle';
+      toggle.setAttribute('aria-label', 'Mostrar u ocultar contraseña');
+      toggle.setAttribute('aria-pressed', 'false');
+      toggle.innerHTML = `
+        <span class="password-input__icon" aria-hidden="true">
+          <svg class="eye eye-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M1.5 12s4.5-7 10.5-7 10.5 7 10.5 7-4.5 7-10.5 7-10.5-7-10.5-7z" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <svg class="eye eye-closed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 4l16 16" />
+            <path d="M5.1 7.5C3 9.6 1.5 12 1.5 12s4.5 7 10.5 7c2 0 3.9-.6 5.5-1.5" />
+            <path d="M20 9.2C22 11.2 22.5 12 22.5 12s-4.5 7-10.5 7c-.8 0-1.5-.1-2.3-.2" />
+            <path d="M14.12 9.88A3 3 0 0 1 14.12 14.12" />
+            <path d="M9.88 9.88A3 3 0 0 0 9.88 14.12" />
+          </svg>
+        </span>
+      `;
+      const sr = document.createElement('span');
+      sr.className = 'sr-only';
+      sr.textContent = 'Alternar visibilidad de la contraseña';
+      toggle.appendChild(sr);
+      toggle.addEventListener('click', () => {
+        const isPassword = input.type === 'password';
+        input.type = isPassword ? 'text' : 'password';
+        const nowVisible = isPassword;
+        wrap.classList.toggle('password-input--visible', nowVisible);
+        toggle.setAttribute('aria-pressed', String(nowVisible));
+      });
+      wrap.appendChild(toggle);
+    });
+  };
+
+  enhancePasswordInputs();
+
+  const setClientStatus = (msg = '', variant = 'info') => {
+    if (!clientStatus) return;
+    clientStatus.textContent = msg;
+    clientStatus.dataset.variant = msg ? variant : '';
+  };
+
+  const setStatus = (msg = '', variant = 'info') => {
+    if (!statusEl) return;
+    statusEl.textContent = msg;
+    statusEl.dataset.variant = msg ? variant : '';
+  };
+
+  const flagField = (field, hasError) => {
+    if (!field) return;
+    field.classList.toggle('has-error', Boolean(hasError));
+  };
+
+  const validatePasswords = () => {
+    const errors = [];
+    const values = {
+      current: passwordFields.current?.value.trim() || '',
+      new1: passwordFields.new1?.value.trim() || '',
+      new2: passwordFields.new2?.value.trim() || '',
+    };
+
+    if (!values.current) errors.push('Debes escribir tu contraseña actual.');
+    if (!values.new1 || values.new1.length < 8) errors.push('La nueva contraseña debe tener al menos 8 caracteres.');
+    if (values.new1 && values.new2 && values.new1 !== values.new2) {
+      errors.push('Las nuevas contraseñas no coinciden.');
+    }
+    if (values.current && values.new1 && values.current === values.new1) {
+      errors.push('La nueva contraseña debe ser distinta a la actual.');
+    }
+
+    flagField(passwordFields.current, values.current === '');
+    flagField(passwordFields.new1, !values.new1 || values.new1.length < 8 || values.current === values.new1);
+    flagField(passwordFields.new2, !values.new2 || values.new1 !== values.new2);
+
+    if (errors.length) {
+      setClientStatus(errors[0], 'error');
+      return false;
+    }
+    setClientStatus('Todo listo, confirma el cambio con tu código.', 'success');
+    return true;
+  };
+
+  Object.values(passwordFields).forEach((field) => {
+    field?.addEventListener('input', () => {
+      flagField(field, false);
+      setClientStatus('');
+    });
+  });
+
+  const getCsrfToken = () => form.querySelector('input[name="csrfmiddlewaretoken"]')?.value || '';
+
+  let sending = false;
+  const requestCode = async () => {
+    if (!codeUrl || sending) return;
+    sending = true;
+    setStatus('Enviando código...', 'info');
+    try {
+      const res = await fetch(codeUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCsrfToken(),
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: '{}',
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || 'No pudimos enviar el código.');
+      setStatus(data.message || 'Código enviado. Revisa tu correo.', 'success');
+    } catch (err) {
+      setStatus(err.message || 'No pudimos enviar el código.', 'error');
+    } finally {
+      sending = false;
+    }
+  };
+
+  const clearCodeInputs = () => {
+    codeInputs.forEach((input) => {
+      input.value = '';
+      input.classList.remove('filled');
+    });
+  };
+
+  const getCodeValue = () => codeInputs.map((input) => input.value.trim()).join('');
+
+  const updateConfirmState = () => {
+    confirmBtn.disabled = getCodeValue().length !== codeInputs.length;
+  };
+
+  codeInputs.forEach((input, index) => {
+    input.addEventListener('input', (event) => {
+      const value = event.target.value.replace(/\D/g, '').slice(0, 1);
+      event.target.value = value;
+      event.target.classList.toggle('filled', Boolean(value));
+      if (value && index < codeInputs.length - 1) {
+        codeInputs[index + 1].focus();
+      }
+      updateConfirmState();
+    });
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Backspace' && !event.target.value && index > 0) {
+        codeInputs[index - 1].focus();
+      }
+    });
+
+    input.addEventListener('paste', (event) => {
+      const text = (event.clipboardData || window.clipboardData).getData('text') || '';
+      const digits = text.replace(/\D/g, '').slice(0, codeInputs.length);
+      if (!digits) return;
+      event.preventDefault();
+      digits.split('').forEach((char, offset) => {
+        const target = codeInputs[index + offset];
+        if (target) {
+          target.value = char;
+          target.classList.add('filled');
+        }
+      });
+      updateConfirmState();
+      const nextIndex = Math.min(index + digits.length, codeInputs.length - 1);
+      codeInputs[nextIndex]?.focus();
+    });
+  });
+
+  const openModal = () => {
+    modal.hidden = false;
+    modal.setAttribute('aria-hidden', 'false');
+    setStatus('');
+    clearCodeInputs();
+    updateConfirmState();
+    requestAnimationFrame(() => codeInputs[0]?.focus());
+    requestCode();
+  };
+
+  const closeModal = () => {
+    modal.hidden = true;
+    modal.setAttribute('aria-hidden', 'true');
+    setStatus('');
+  };
+
+  trigger.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    if (validatePasswords()) {
+      openModal();
+    }
+  });
+
+  modal.querySelectorAll('[data-modal-close]').forEach((btn) => {
+    btn.addEventListener('click', () => closeModal());
+  });
+
+  modal.addEventListener('click', (evt) => {
+    if (evt.target === modal) closeModal();
+  });
+
+  sendCodeBtn?.addEventListener('click', requestCode);
+
+  confirmBtn.addEventListener('click', () => {
+    const value = getCodeValue();
+    if (value.length !== codeInputs.length) {
+      setStatus('Completa el código de seguridad para continuar.', 'error');
+      const nextInput = codeInputs.find((input) => !input.value) || codeInputs[codeInputs.length - 1];
+      nextInput?.focus();
+      return;
+    }
+    hiddenField.value = value;
+    closeModal();
+    form.submit();
+  });
+})();
+</script>
+
+{% endblock %}

@@ -1,0 +1,277 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{% load socialaccount %} {# <-- ESTA LÍNEA ES NUEVA IMPORTANTE #}
+
+{% block contenido %}
+
+<link rel="stylesheet" href="{% static 'cuentas/css/login.css' %}">
+
+<main class="card" role="main" aria-labelledby="title">
+  <!-- Logo -->
+  <img class="brand-mark" src="{% static 'cuentas/images/logo_transparente.png' %}" alt="Akuma no Pet">
+
+  <h1 id="title">Iniciar sesión</h1>
+  <p class="sub">Bienvenido(a) a Akuma no Pet</p>
+
+  <form id="formLogin" method="post" action="{% url 'cuentas:login' %}" novalidate>
+    {% csrf_token %}
+    {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+    {# Mensajes del servidor (para SweetAlert) #}
+    {% if messages %}
+      {% for m in messages %}
+        <div id="loginError" data-msg="{{ m|escape }}"></div>
+      {% endfor %}
+    {% endif %}
+
+    {# Errores del form (fallback visible en la card) #}
+    {% if form and form.non_field_errors %}
+      <p id="error" class="error" role="alert" aria-live="polite">
+        {{ form.non_field_errors|join:", " }}
+      </p>
+    {% else %}
+      <p id="error" class="error" role="alert" aria-live="polite"></p>
+    {% endif %}
+
+    <!-- Email -->
+    <div class="field">
+      <label for="id_username" class="label">Email</label>
+      <div class="control">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M22 6l-10 7L2 6"></path>
+          <rect x="2" y="6" width="20" height="12" rx="2" ry="2"></rect>
+        </svg>
+        <input id="id_username" name="username" type="email" class="input"
+               placeholder="ejemplo@correo.cl" autocomplete="username" required />
+      </div>
+    </div>
+
+    <!-- Password -->
+    <div class="field">
+      <label for="id_password" class="label">Contraseña</label>
+      <div class="control">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="11" width="18" height="11" rx="2"></rect>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+        </svg>
+        <input id="id_password" name="password" type="password" class="input"
+               placeholder="••••••••" autocomplete="current-password" required />
+        <button type="button" class="toggle" id="togglePass" aria-label="Mostrar contraseña" title="Mostrar/Ocultar">
+          <svg id="icoEye" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Remember -->
+    <label class="remember">
+      <input type="checkbox" name="remember" id="remember"> Recordarme
+    </label>
+
+    <!-- Botón login normal -->
+    <button type="submit" class="btn" id="btnLogin">Iniciar sesión</button>
+
+    <!-- Links secundarios -->
+    <div class="forgot-group">
+      <div class="forgot-actions">
+        <button type="button" id="forgotToggle" class="link-button" aria-expanded="false">¿Olvidaste tu contraseña?</button>
+      </div>
+      <div class="forgot-panel" id="forgotPanel" hidden data-reset-url="{% url 'password_reset' %}">
+        <div class="forgot-panel__header">
+          <div class="forgot-panel__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 1a7 7 0 0 1 7 7c0 3.46-2.62 6.52-5.27 9.05a2 2 0 0 1-2.46 0C8.62 14.52 6 11.46 6 8a7 7 0 0 1 6-7z"/>
+              <path d="M12 11v4"/>
+              <circle cx="12" cy="17" r="1"/>
+            </svg>
+          </div>
+          <div>
+            <strong>Recupera tu acceso</strong>
+            <p>Ingresa tu correo y te enviaremos un enlace de verificación.</p>
+          </div>
+        </div>
+        <div class="forgot-panel__row">
+          <input type="email" id="forgotEmail" class="input" placeholder="correo@ejemplo.cl" autocomplete="email">
+          <button type="button" class="btn-secondary" id="forgotSubmit">Enviar enlace</button>
+        </div>
+        <p class="forgot-panel__status" id="forgotStatus" aria-live="polite"></p>
+      </div>
+    </div>
+
+    <p class="foot">
+      ¿No tienes cuenta?
+      <a href="{% url 'cuentas:registro' %}" id="linkRegistro">Crear cuenta</a>
+    </p>
+
+    <div class="divider">
+      <span class="line"></span>
+      <span>O CONTINÚA CON</span>
+      <span class="line"></span>
+    </div>
+
+    {# === BOTÓN GOOGLE (usa provider_login_url) === #}
+    <a
+      class="btn-google"
+      id="btnGoogle"
+      href="{% provider_login_url 'google' %}"
+    >
+      <img src="{% static 'icons/google.svg' %}" alt="" aria-hidden="true">
+      Continuar con Google
+    </a>
+
+    <p class="foot" style="margin-top:10px">Akuma no pet.</p>
+  </form>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+// SweetAlert con mensajes del backend (Django messages)
+(function () {
+  const holder = document.getElementById('loginError');
+  if (holder && holder.dataset.msg) {
+    Swal.fire({
+      icon: 'error',
+      title: 'Oops…',
+      text: holder.dataset.msg,
+      confirmButtonText: 'Entendido',
+      confirmButtonColor: '#5213a1'
+    });
+  }
+})();
+
+// Mostrar/ocultar contraseña
+(function(){
+  const btn = document.getElementById('togglePass');
+  const input = document.getElementById('id_password');
+  if (btn && input) {
+    btn.addEventListener('click', () => {
+      const isPwd = input.type === 'password';
+      input.type = isPwd ? 'text' : 'password';
+      btn.setAttribute('aria-label', isPwd ? 'Ocultar contraseña' : 'Mostrar contraseña');
+    });
+  }
+})();
+
+// Validación mínima en cliente
+(function () {
+  const form   = document.getElementById('formLogin');
+  const email  = document.getElementById('id_username');
+  const pass   = document.getElementById('id_password');
+  const errorP = document.getElementById('error');
+
+  function setInvalid(input) {
+    input.classList.add('is-invalid');
+    input.setAttribute('aria-invalid', 'true');
+  }
+  function clearInvalid(input) {
+    input.classList.remove('is-invalid');
+    input.removeAttribute('aria-invalid');
+  }
+
+  ;[email, pass].forEach(el => el.addEventListener('input', () => clearInvalid(el)));
+
+  form.addEventListener('submit', function (e) {
+    const errs = [];
+    const mail = (email.value || '').trim();
+    const pwd  = (pass.value  || '').trim();
+
+    clearInvalid(email); clearInvalid(pass);
+    errorP.textContent = '';
+
+    if (!mail) { errs.push('Ingresa tu email.'); setInvalid(email); }
+    if (!pwd)  { errs.push('Ingresa tu contraseña.'); setInvalid(pass); }
+
+    if (errs.length) {
+      e.preventDefault();
+      errorP.textContent = errs.join(' ');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Campos incompletos',
+        text: 'Por favor completa email y contraseña.',
+        confirmButtonText: 'Ok',
+        confirmButtonColor: '#5213a1'
+      }).then(() => {
+        if (!mail) email.focus(); else pass.focus();
+      });
+    }
+  });
+})();
+
+// Forgot password inline panel
+(function () {
+  const panel = document.getElementById('forgotPanel');
+  const toggle = document.getElementById('forgotToggle');
+  const emailInput = document.getElementById('forgotEmail');
+  const submitBtn = document.getElementById('forgotSubmit');
+  const statusEl = document.getElementById('forgotStatus');
+  const resetUrl = panel?.dataset.resetUrl;
+  const csrf = document.querySelector('#formLogin input[name="csrfmiddlewaretoken"]')?.value || '';
+
+  if (!panel || !toggle || !emailInput || !submitBtn || !resetUrl) return;
+
+  const setStatus = (msg, variant = 'info') => {
+    if (!statusEl) return;
+    statusEl.textContent = msg || '';
+    statusEl.classList.remove('error', 'success');
+    if (variant === 'error') statusEl.classList.add('error');
+    if (variant === 'success') statusEl.classList.add('success');
+  };
+
+  toggle.addEventListener('click', () => {
+    const willShow = panel.hasAttribute('hidden');
+    if (willShow) {
+      panel.removeAttribute('hidden');
+      emailInput.focus();
+    } else {
+      panel.setAttribute('hidden', 'hidden');
+      setStatus('');
+    }
+    toggle.setAttribute('aria-expanded', String(willShow));
+  });
+
+  const sendRequest = async () => {
+    const email = emailInput.value.trim();
+    if (!email) {
+      setStatus('Ingresa tu correo para enviarte el enlace.', 'error');
+      emailInput.focus();
+      return;
+    }
+    submitBtn.disabled = true;
+    setStatus('Enviando enlace...', 'info');
+    try {
+      const body = new URLSearchParams();
+      body.append('email', email);
+      if (csrf) body.append('csrfmiddlewaretoken', csrf);
+      const res = await fetch(resetUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: body.toString(),
+      });
+      if (!res.ok) throw new Error();
+      setStatus('Si el correo está registrado, recibirás un enlace de verificación en segundos.', 'success');
+    } catch (err) {
+      setStatus('No pudimos enviar el enlace. Inténtalo nuevamente.', 'error');
+    } finally {
+      submitBtn.disabled = false;
+    }
+  };
+
+  submitBtn.addEventListener('click', sendRequest);
+  emailInput.addEventListener('keydown', (evt) => {
+    if (evt.key === 'Enter') {
+      evt.preventDefault();
+      sendRequest();
+    }
+  });
+})();
+</script>
+
+{% endblock %}

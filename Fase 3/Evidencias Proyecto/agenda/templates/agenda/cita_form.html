@@ -1,0 +1,61 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% block contenido %}
+<link rel="stylesheet" href="{% static 'agenda/css/styles.css' %}">
+
+<main class="page">
+  <header class="page-head">
+    <h1>{{ titulo|default:"Cita" }}</h1>
+  </header>
+
+  <section class="card form-wrap">
+    <form method="post" novalidate class="form-grid">
+      {% csrf_token %}
+
+      <div class="field">
+        <label for="{{ form.fecha.id_for_label }}">Fecha</label>
+        {{ form.fecha }}
+        {% if form.fecha.errors %}<small class="err">{{ form.fecha.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.hora.id_for_label }}">Hora</label>
+        {{ form.hora }}
+        {% if form.hora.errors %}<small class="err">{{ form.hora.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.duracion_min.id_for_label }}">Duración (min)</label>
+        {{ form.duracion_min }}
+        {% if form.duracion_min.errors %}<small class="err">{{ form.duracion_min.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.profesional.id_for_label }}">Profesional</label>
+        {{ form.profesional }}
+        {% if form.profesional.errors %}<small class="err">{{ form.profesional.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="field">
+        <label for="{{ form.servicio.id_for_label }}">Servicio</label>
+        {{ form.servicio }}
+        {% if form.servicio.errors %}<small class="err">{{ form.servicio.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="field col-2">
+        <label for="{{ form.mascota.id_for_label }}">Mascota</label>
+        {{ form.mascota }}
+        {% if form.mascota.errors %}<small class="err">{{ form.mascota.errors.0 }}</small>{% endif %}
+      </div>
+
+      <div class="actions col-2">
+        <button type="submit" class="btn-primary">Guardar</button>
+        <a class="btn-ghost"
+           href="{% url 'agenda:lista' %}?mode=day&day={{ form.initial.fecha|default:form.instance.fecha|default:today|date:'Y-m-d' }}">
+          Cancelar
+        </a>
+      </div>
+    </form>
+  </section>
+</main>
+{% endblock %}

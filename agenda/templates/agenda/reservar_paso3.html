@@ -1,0 +1,113 @@
+{% extends "main/base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'agenda/css/agenda.css' %}?v=8">
+{% endblock %}
+
+{% block contenido %}
+<main class="rsv">
+  <header class="rsv-head container">
+    <a class="crumb" href="{% url 'agenda:reservar' %}?step=2" aria-label="Volver al paso anterior">‹ Volver</a>
+    <div class="steps" role="navigation" aria-label="Progreso">
+      <span class="step done"><span>1</span> Servicio</span>
+      <span class="step done"><span>2</span> Fecha y hora</span>
+      <span class="step current" aria-current="step"><span>3</span> Tus datos</span>
+    </div>
+    <div class="meter" aria-hidden="true"><div class="bar" style="width:100%"></div></div>
+    <p class="donepct">100% completado</p>
+  </header>
+
+  <section class="container rsv-grid">
+   <form method="post" class="card rsv-form" id="rsvForm">
+  {% csrf_token %}
+
+  <div class="fields">
+    <label class="field">
+      <span>Nombre</span>
+      {{ form.nombre }}
+      {% if form.nombre.errors %}<p class="f-err">{{ form.nombre.errors.0 }}</p>{% else %}<small class="hint">Como quieres que te llamemos en la clínica.</small>{% endif %}
+    </label>
+
+    <label class="field">
+      <span>Email</span>
+      {{ form.email }}
+      {% if form.email.errors %}<p class="f-err">{{ form.email.errors.0 }}</p>{% else %}<small class="hint">Recibirás la confirmación y el comprobante.</small>{% endif %}
+    </label>
+
+    <label class="field">
+      <span>WhatsApp (opcional)</span>
+      {{ form.whatsapp }}
+      {% if form.whatsapp.errors %}<p class="f-err">{{ form.whatsapp.errors.0 }}</p>{% endif %}
+    </label>
+
+    <h3 class="box-title" style="margin-top:14px">Datos de tu mascota</h3>
+
+    <label class="field">
+      <span>Nombre de la mascota</span>
+      {{ form.mascota }}
+      {% if form.mascota.errors %}<p class="f-err">{{ form.mascota.errors.0 }}</p>{% endif %}
+    </label>
+
+    <label class="field">
+      <span>Especie</span>
+      {{ form.especie }}
+      {% if form.especie.errors %}<p class="f-err">{{ form.especie.errors.0 }}</p>{% endif %}
+    </label>
+  </div>
+
+  <div class="actions">
+    <a class="btn btn-ghost" href="{% url 'agenda:reservar' %}?step=2">‹ Anterior</a>
+    <button class="btn btn-primary" id="submitBtn" type="submit">
+      <span class="btn__text">Confirmar reserva</span>
+      <svg class="spinner" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"></circle></svg>
+    </button>
+  </div>
+</form>
+
+    <aside class="card rsv-summary" aria-label="Resumen de la cita">
+      <h3 class="card-title">Resumen de la cita</h3>
+
+      <div class="sum-item">
+        <strong>{{ resumen.servicio.nombre }}</strong>
+        {% if resumen.servicio.descripcion %}<div class="muted">{{ resumen.servicio.descripcion }}</div>{% endif %}
+        <div class="muted">⏱ {{ resumen.servicio.duracion_min_default|default:30 }} min</div>
+      </div>
+
+      <div class="sum-split">
+        <div class="sum-line"><span>📅 Fecha</span><strong>{{ resumen.fecha }}</strong></div>
+        <div class="sum-line"><span>⏰ Hora</span><strong>{{ resumen.hora }} hrs</strong></div>
+      </div>
+
+      <div class="sum-line">
+        <span>👩‍⚕️ Profesional</span>
+        <strong>{{ resumen.profesional|default:"Cualquier profesional disponible" }}</strong>
+      </div>
+
+      <hr class="sep">
+      <div class="sum-total">
+        <span>Total a pagar</span>
+        <strong>{% if resumen.servicio.precio %}${{ resumen.servicio.precio|intcomma }}{% else %}—{% endif %}</strong>
+      </div>
+
+      <div class="sum-help" style="display:flex;gap:.6rem;align-items:flex-start;margin-top:.75rem;color:#6b7280">
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm0 14.5a1.25 1.25 0 1 1 0 2.5 1.25 1.25 0 0 1 0-2.5Zm1.5-7.25c0-1.1-.9-2-2-2s-2 .9-2 2h-2a4 4 0 1 1 8 0c0 2.5-2 3-2.9 3.9-.6.6-.6 1-.6 1.6v.3h-2v-.3c0-1.2.2-2 .9-2.7 1.2-1.1 2.6-1.5 2.6-2.8Z" fill="currentColor"/></svg>
+        <p style="margin:0">Podrás reprogramar sin costo hasta 12 horas antes.</p>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<script>
+(function(){
+  const form=document.getElementById('rsvForm');
+  const btn=document.getElementById('submitBtn');
+  form?.addEventListener('submit',function(){
+    if(!form.checkValidity()) return;
+    btn.classList.add('is-loading');
+    btn.setAttribute('aria-busy','true');
+  });
+})();
+</script>
+{% endblock %}

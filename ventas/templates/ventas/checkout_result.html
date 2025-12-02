@@ -1,0 +1,98 @@
+{% extends "main/base.html" %}
+{% load humanize %}
+
+{% block contenido %}
+<section class="container checkout-result">
+  <div class="result-card {% if success %}success{% else %}error{% endif %}">
+    {% if success %}
+      <span class="result-icon">✔</span>
+      <h1>¡Pago confirmado!</h1>
+    {% else %}
+      <span class="result-icon">⚠</span>
+      <h1>No pudimos completar el pago</h1>
+    {% endif %}
+    <p>{{ message }}</p>
+    <p class="order-id">Pedido #{{ venta.pk }} — {{ venta.creado_en|date:"d/m/Y H:i" }}</p>
+  </div>
+
+  <div class="result-grid">
+    <article class="card">
+      <h2>Productos</h2>
+      <ul class="items">
+        {% for item in detalle_items %}
+          <li>
+            <div>
+              <strong>{{ item.nombre }}</strong>
+              <small>{{ item.cantidad }} × ${{ item.precio|floatformat:0 }}</small>
+            </div>
+            <span>${{ item.subtotal|floatformat:0 }}</span>
+          </li>
+        {% endfor %}
+      </ul>
+      <div class="total">
+        <span>Total</span>
+        <strong>${{ venta.total|floatformat:0 }}</strong>
+      </div>
+    </article>
+
+    <article class="card">
+      <h2>Datos de pago</h2>
+      <dl>
+        <dt>Estado</dt>
+        <dd>{{ venta.get_estado_display }}</dd>
+        {% if pago %}
+          <dt>Código autorización</dt>
+          <dd>{{ pago.authorization_code|default:"—" }}</dd>
+          <dt>Medio</dt>
+          <dd>
+            {% if pago.payment_type %}{{ pago.payment_type }}{% else %}Tarjeta{% endif %}
+          </dd>
+        {% endif %}
+        <dt>Boleta enviada a</dt>
+        <dd>{{ venta.email_cliente|default:"Sin correo" }}</dd>
+      </dl>
+      <div class="actions">
+        <a class="btn btn-morado-nav" href="{% url 'productos:lista' %}">Seguir comprando</a>
+        {% if not success %}
+          <a class="btn btn-blanco-nav" href="{% url 'ventas:checkout' %}">Intentar nuevamente</a>
+        {% endif %}
+      </div>
+    </article>
+  </div>
+</section>
+
+<style>
+.checkout-result { padding: 3rem 0 4rem; }
+.result-card { text-align:center; padding:2rem; border-radius:20px; margin-bottom:2rem; }
+.result-card.success { background:#f0fff4; border:1px solid #c6f6d5; color:#22543d; }
+.result-card.error { background:#fff5f5; border:1px solid #fed7d7; color:#822727; }
+.result-icon { font-size:2rem; display:inline-flex; width:48px; height:48px; border-radius:50%; align-items:center; justify-content:center; margin-bottom:.5rem; }
+.result-card.success .result-icon { background:#48bb78; color:#fff; }
+.result-card.error .result-icon { background:#f56565; color:#fff; }
+.order-id { font-weight:600; margin-top:.5rem; }
+.result-grid { display:grid; gap:1.5rem; grid-template-columns: repeat(auto-fit,minmax(280px,1fr)); }
+.card { background:#fff; border-radius:18px; padding:1.8rem; border:1px solid #eee; box-shadow:0 12px 26px rgba(82,19,161,.06); }
+.items { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:1rem; }
+.items li { display:flex; justify-content:space-between; border-bottom:1px dashed #f0f0f8; padding-bottom:.75rem; }
+.items small { display:block; color:#6b6b7b; }
+.total { display:flex; justify-content:space-between; font-size:1.2rem; margin-top:1.5rem; font-weight:700; }
+dl { margin:0; }
+dt { font-weight:600; margin-top:1rem; color:#4a445e; }
+dd { margin:0.2rem 0 0; color:#1f1f31; }
+.actions { margin-top:2rem; display:flex; gap:.75rem; flex-wrap:wrap; }
+.btn { text-align:center; flex:1; }
+@media (max-width: 720px){
+  .checkout-result { padding: 2.5rem 0; }
+  .result-card { padding: 1.5rem; }
+  .result-grid { grid-template-columns: 1fr; }
+  .items li { flex-direction: column; gap: .35rem; }
+  .total { flex-direction: column; align-items: flex-start; gap: .25rem; }
+}
+@media (max-width: 520px){
+  .actions { flex-direction: column; }
+  .actions .btn { width: 100%; }
+  .card { padding: 1.3rem; border-radius: 16px; }
+  .result-card h1 { font-size: clamp(1.6rem, 8vw, 2.2rem); }
+}
+</style>
+{% endblock %}

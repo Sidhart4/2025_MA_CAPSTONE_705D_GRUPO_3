@@ -1,0 +1,59 @@
+{# carrito/_mini.html #}
+{% load static humanize %}
+
+<header class="cart-drawer__head">
+  <h3 id="drawerTitle">Tu carrito</h3>
+  <button type="button" class="cart-drawer__close" data-close-drawer aria-label="Cerrar">×</button>
+</header>
+
+{% if lines %}
+  <ul class="cart-drawer__list">
+    {% for it in lines %}
+      <li class="cart-drawer__item" data-id="{{ it.id }}">
+        <div class="cart-drawer__thumb">
+          {% if it.img %}
+            <img src="{{ it.img }}" alt="{{ it.name }}">
+          {% else %}
+            <img src="{% static 'images/placeholder.png' %}" alt="{{ it.name }}">
+          {% endif %}
+        </div>
+
+        <div class="cart-drawer__info">
+          <div class="cart-drawer__name">{{ it.name }}</div>
+          <div class="cart-drawer__price">${{ it.price|floatformat:0|intcomma }}</div>
+
+          <div class="cart-drawer__row">
+            <div class="cart-drawer__qtywrap">
+              <button class="qtybtn" type="button" data-update="-1">−</button>
+              <span class="cart-drawer__qty">{{ it.qty }}</span>
+              <button class="qtybtn" type="button" data-update="+1">+</button>
+            </div>
+            <div class="cart-drawer__subtotal">
+              Subtotal: <strong>${{ it.subtotal|floatformat:0|intcomma }}</strong>
+            </div>
+          </div>
+
+          <button class="cart-drawer__remove" type="button" data-remove>Eliminar</button>
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <footer class="cart-drawer__foot">
+    <div class="cart-drawer__total">
+      <span>Total:</span>
+      <strong>${{ total|floatformat:0|intcomma }}</strong>
+    </div>
+    <div class="cart-drawer__actions">
+      <a class="btn btn-primary" href="{% url 'carrito:ver' %}">Ir al carrito</a>
+      <button class="btn btn-ghost" type="button" data-close-drawer>Seguir comprando</button>
+    </div>
+  </footer>
+
+{% else %}
+  <div class="cart-drawer__empty">
+    <div class="cart-drawer__empty-icon">🛒</div>
+    <p class="cart-drawer__empty-text">Tu carrito está vacío.</p>
+    <button class="btn btn-primary" type="button" data-close-drawer>Buscar productos</button>
+  </div>
+  {% endif %}

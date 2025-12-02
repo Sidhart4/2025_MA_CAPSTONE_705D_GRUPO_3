@@ -19,8 +19,9 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_POST
 
 from agenda.models import Cita
-from .forms import MascotaPerfilForm
+from .forms import MascotaFotoForm
 from .models import MascotaPerfil
+from fichas.models import FichaClinica
 
 
 PASSWORD_CODE_SESSION_KEY = "perfil_password_code"
@@ -109,7 +110,6 @@ def perfil_usuario(request):
     """Dashboard con info de usuario, citas y mascotas."""
 
     password_form = PasswordChangeForm(user=request.user)
-    mascota_form = MascotaPerfilForm(usuario=request.user)
 
     if request.method == "POST":
         action = request.POST.get("action")
@@ -152,17 +152,15 @@ def perfil_usuario(request):
                     request,
                     "Por favor corrige los errores del formulario de contraseña.",
                 )
-        elif action == "mascota":
-            mascota_form = MascotaPerfilForm(
-                request.POST, request.FILES, usuario=request.user
-            )
-            if mascota_form.is_valid():
-                mascota = mascota_form.save(commit=False)
-                mascota.usuario = request.user
-                mascota.save()
-                messages.success(request, "Mascota guardada exitosamente.")
+        elif action == "mascota_foto":
+            pet_id = request.POST.get("pet_id")
+            mascota = get_object_or_404(MascotaPerfil, pk=pet_id, usuario=request.user)
+            foto_form = MascotaFotoForm(request.POST, request.FILES, instance=mascota)
+            if foto_form.is_valid():
+                foto_form.save()
+                messages.success(request, "Informaci?n de la mascota actualizada.")
                 return redirect("cuentas:perfil")
-            messages.error(request, "Revisa los datos de tu mascota.")
+            messages.error(request, "Revisa los datos enviados.")
         else:
             messages.error(request, "Acción no soportada.")
 
@@ -189,12 +187,18 @@ def perfil_usuario(request):
         target = citas_pendientes if inicio >= ahora else citas_pasadas
         target.append({"cita": cita, "inicio": inicio})
 
+    fichas = (
+        FichaClinica.objects.filter(cliente=request.user)
+        .select_related("mascota", "profesional")
+        .order_by("-fecha", "-created_at")
+    )
+
     context = {
         "mascotas": mascotas,
         "password_form": password_form,
-        "mascota_form": mascota_form,
         "citas_pendientes": citas_pendientes,
         "citas_pasadas": citas_pasadas,
+        "fichas": fichas,
     }
     return render(request, "cuentas/perfil.html", context)
 

@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: akumanopet
+    env: python
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py migrate --noinput"
+    startCommand: "gunicorn akumanopet.wsgi:application"
+    envVars:
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        value: "akumanopet.onrender.com"
+      - key: CSRF_TRUSTED_ORIGINS
+        value: "https://akumanopet.onrender.com"
+      - key: DATABASE_URL
+        sync: false
+      - key: DJANGO_SETTINGS_MODULE
+        value: "akumanopet.settings"

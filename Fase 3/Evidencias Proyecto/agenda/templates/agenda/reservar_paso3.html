@@ -2,9 +2,11 @@
 {% load static %}
 {% load humanize %}
 
-{% block contenido %}
+{% block extra_head %}
 <link rel="stylesheet" href="{% static 'agenda/css/agenda.css' %}?v=8">
+{% endblock %}
 
+{% block contenido %}
 <main class="rsv">
   <header class="rsv-head container">
     <a class="crumb" href="{% url 'agenda:reservar' %}?step=2" aria-label="Volver al paso anterior">‹ Volver</a>

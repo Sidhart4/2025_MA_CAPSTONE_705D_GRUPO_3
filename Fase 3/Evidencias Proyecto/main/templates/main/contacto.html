@@ -1,0 +1,131 @@
+﻿{% extends "main/base.html" %}
+{% load static %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'main/css/contacto.css' %}">
+{% endblock %}
+
+{% block contenido %}
+<section class="hero sub-hero contact-hero">
+  <div class="container contact-hero__grid">
+    <div class="contact-hero__copy" data-reveal="up">
+      <p class="eyebrow">Hablemos</p>
+      <h1 class="title">Contacto</h1>
+      <p class="lead">¿Tienes dudas o quieres reservar? Escríbenos y te respondemos rápido.</p>
+      <div class="contact-hero__meta">
+        <span class="pill">Tiempo de respuesta: 24-48h</span>
+        <span class="pill pill--ghost">Equipo online: Lun a Sáb</span>
+      </div>
+    </div>
+    <div class="contact-hero__card" data-reveal="zoom" data-reveal-delay="100">
+      <h3>Te acompañamos</h3>
+      <p>Coordinamos agenda, asignamos doctor y enviamos recordatorios automáticos para que no se te pase nada.</p>
+      <ul class="contact-bullets">
+        <li>Seguimiento posterior a la consulta</li>
+        <li>Respuesta por correo y WhatsApp</li>
+        <li>Atención presencial en Maipú</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section contact-section">
+  <div class="container contact-layout">
+    <article class="contact-card" data-reveal="up">
+      <div class="contact-card__head">
+        <p class="eyebrow eyebrow--sub">Escríbenos</p>
+        <h2>Cuéntanos cómo ayudarte</h2>
+        <p>Te contactaremos en el siguiente bloque horario con la mejor alternativa para tu mascota.</p>
+      </div>
+
+      {% if enviado %}
+      <div class="alert success" role="status">
+        ¡Gracias! Tu mensaje fue enviado correctamente. Te contactaremos pronto.
+      </div>
+      {% endif %}
+      {% if messages %}
+      <ul class="msgs">
+        {% for m in messages %}<li class="{{ m.tags }}">{{ m }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+
+      <form method="post" class="contact-form-grid" novalidate>
+        {% csrf_token %}
+
+        <div class="field">
+          <label for="{{ form.nombre.id_for_label }}">Nombre</label>
+          {{ form.nombre }}
+          {% if form.nombre.errors %}<small class="err">{{ form.nombre.errors.0 }}</small>{% endif %}
+        </div>
+
+        <div class="field">
+          <label for="{{ form.correo.id_for_label }}">Correo</label>
+          {{ form.correo }}
+          {% if form.correo.errors %}<small class="err">{{ form.correo.errors.0 }}</small>{% endif %}
+        </div>
+
+        <div class="field">
+          <label for="{{ form.telefono.id_for_label }}">Teléfono (opcional)</label>
+          {{ form.telefono }}
+          {% if form.telefono.errors %}<small class="err">{{ form.telefono.errors.0 }}</small>{% endif %}
+        </div>
+
+        <div class="field">
+          <label for="{{ form.asunto.id_for_label }}">Asunto</label>
+          {{ form.asunto }}
+          {% if form.asunto.errors %}<small class="err">{{ form.asunto.errors.0 }}</small>{% endif %}
+        </div>
+
+        <div class="field full">
+          <label for="{{ form.mensaje.id_for_label }}">Mensaje</label>
+          {{ form.mensaje }}
+          {% if form.mensaje.errors %}<small class="err">{{ form.mensaje.errors.0 }}</small>{% endif %}
+        </div>
+
+        <div class="field full agree">
+          <label class="chk">
+            {{ form.acepta }}
+            <span>Acepto la <a href="#" target="_blank" rel="noopener">política de privacidad</a></span>
+          </label>
+          {% if form.acepta.errors %}<small class="err">{{ form.acepta.errors.0 }}</small>{% endif %}
+        </div>
+
+        <div class="contact-actions full">
+          <button type="submit" class="btn-primary">Enviar</button>
+          <a href="{% url 'main:home' %}" class="btn-ghost">Volver al inicio</a>
+        </div>
+      </form>
+    </article>
+
+    <aside class="contact-side" data-reveal="fade" data-reveal-delay="140">
+      <div class="info-card">
+        <p class="eyebrow eyebrow--sub">Canales directos</p>
+        <h3>Prefieres hablar ahora</h3>
+        <ul class="contact-list">
+          <li>
+            <span class="info-label">Teléfono</span>
+            <a href="tel:+56940344962">+56 9 4034 4962</a>
+            <small>Urgencias y agendamientos rápidos.</small>
+          </li>
+          <li>
+            <span class="info-label">Correo</span>
+            <a href="mailto:akumanopet@gmail.com">akumanopet@gmail.com</a>
+            <small>Adjunta exámenes o antecedentes.</small>
+          </li>
+          <li>
+            <span class="info-label">WhatsApp</span>
+            <a href="https://wa.me/56940344962?text=Hola%2C%20necesito%20ayuda%20con%20mi%20mascota" target="_blank" rel="noopener">Escríbenos por WhatsApp</a>
+            <small>Responderemos en horario hábil.</small>
+          </li>
+        </ul>
+      </div>
+
+      <div class="info-card info-card--light">
+        <h4>Visítanos</h4>
+        <p>Monte Palomar 171, Maipú.</p>
+        <p class="info-note">Lun a Sáb, 9:00-19:00</p>
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

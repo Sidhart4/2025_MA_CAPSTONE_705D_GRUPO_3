@@ -13,6 +13,8 @@ from django.contrib.auth.decorators import user_passes_test
 from django.conf import settings  # <- NUEVO
 from urllib.parse import urljoin  # <- NUEVO
 from main.utils_email import enviar_correo_reserva
+from django.core.exceptions import ValidationError
+import re
 
 import datetime as dt
 import math
@@ -124,6 +126,26 @@ def horas_disponibles_por_profesional(
     return out
 
 
+def _normalizar_whatsapp(valor: str) -> str:
+    """
+    Acepta formatos chilenos con o sin +56, espacios o guiones.
+    Devuelve siempre 569XXXXXXXX (solo dígitos) listo para WhatsApp API.
+    """
+    if not valor:
+        return ""
+
+    plano = re.sub(r"[^\d+]", "", valor)
+    if plano.startswith("+"):
+        plano = plano[1:]
+    if plano.startswith("56"):
+        plano = plano[2:]
+
+    if not plano.startswith("9") or len(plano) != 9:
+        raise ValidationError("Ingresa un WhatsApp chileno válido: +56 9 1234 5678.")
+
+    return f"569{plano[1:]}"
+
+
 def horas_disponibles(
     fecha: dt.date,
     profesional: Optional[Profesional],
@@ -224,7 +246,19 @@ def profesional_libre_para_hora(
 class CitaForm(forms.ModelForm):
     class Meta:
         model = Cita
-        fields = ["fecha", "hora", "duracion_min", "profesional", "servicio", "mascota"]
+        fields = [
+            "fecha",
+            "hora",
+            "duracion_min",
+            "profesional",
+            "servicio",
+            "mascota",
+            "nombre_cliente",
+            "email_contacto",
+            "whatsapp_contacto",
+            "recuerda_mail",
+            "recuerda_wa",
+        ]
         widgets = {
             "fecha": forms.DateInput(attrs={"type": "date"}),
             "hora": forms.TimeInput(attrs={"type": "time"}),
@@ -394,13 +428,18 @@ class Paso2HorarioForm(forms.Form):
         if horas:
             self.fields["hora"].choices = [(h, h) for h in horas]
         else:
-            self.fields["hora"].choices = [("", "— Pulsa Buscar horarios —")]
+            self.fields["hora"].choices = [("", "Pulsa Buscar horarios")]
 
 
 class Paso3DatosForm(forms.Form):
     nombre = forms.CharField(label="Tu nombre", max_length=120, widget=forms.TextInput(attrs={"class": "input"}))
     email = forms.EmailField(label="Email", widget=forms.EmailInput(attrs={"class": "input"}))
-    whatsapp = forms.CharField(label="WhatsApp (opcional)", max_length=20, required=False, widget=forms.TextInput(attrs={"class": "input"}))
+    whatsapp = forms.CharField(
+        label="WhatsApp (opcional)",
+        max_length=20,
+        required=False,
+        widget=forms.TextInput(attrs={"class": "input", "placeholder": "+56 9 1234 5678"}),
+    )
     mascota = forms.CharField(label="Nombre de la mascota", max_length=120, widget=forms.TextInput(attrs={"class": "input"}))
     especie = forms.ChoiceField(
         label="Especie",
@@ -409,6 +448,10 @@ class Paso3DatosForm(forms.Form):
     )
     recuerda_mail = forms.BooleanField(label="Recordatorio por email (24h antes)", initial=True, required=False)
     recuerda_wa = forms.BooleanField(label="Recordatorio por WhatsApp (24h antes)", initial=False, required=False)
+
+    def clean_whatsapp(self):
+        tel = (self.cleaned_data.get("whatsapp") or "").strip()
+        return _normalizar_whatsapp(tel)
 
 
 WIZ_KEY = "reserva_wizard"
@@ -448,7 +491,21 @@ def reservar_wizard(request):
                 return redirect(f"{reverse('agenda:reservar')}?step=2")
         else:
             initial = {}
-            if wiz.get("servicio_id"):
+            preselect = request.GET.get("servicio")
+            servicio_prefill = None
+            if preselect:
+                try:
+                    servicio_prefill = Servicio.objects.get(pk=preselect)
+                except (Servicio.DoesNotExist, ValueError):
+                    servicio_prefill = None
+                else:
+                    initial["servicio"] = servicio_prefill.pk
+                    if wiz.get("servicio_id") != servicio_prefill.pk:
+                        wiz["servicio_id"] = servicio_prefill.pk
+                        _wiz_set(request, wiz)
+            if not preselect and wiz.get("servicio_id"):
+                initial["servicio"] = wiz["servicio_id"]
+            elif preselect and not servicio_prefill and wiz.get("servicio_id"):
                 initial["servicio"] = wiz["servicio_id"]
             f = Paso1ServicioForm(initial=initial)
 
@@ -578,6 +635,11 @@ def reservar_wizard(request):
                     servicio=srv,
                     mascota=f"{f.cleaned_data['mascota']} ({f.cleaned_data['especie']})",
                     cliente=request.user if request.user.is_authenticated else None,
+                    nombre_cliente=f.cleaned_data["nombre"],
+                    email_contacto=f.cleaned_data["email"],
+                    whatsapp_contacto=f.cleaned_data.get("whatsapp") or "",
+                    recuerda_mail=f.cleaned_data.get("recuerda_mail", True),
+                    recuerda_wa=f.cleaned_data.get("recuerda_wa", False),
                 )
 
                 # ===== Enlace público (no localhost) =====
@@ -621,55 +683,7 @@ def reservar_wizard(request):
     return HttpResponseBadRequest("Paso inválido")
 
 
-class ReservaPaso3Form(forms.Form):
-    nombre   = forms.CharField(
-        label="Nombre",
-        min_length=2,
-        max_length=80,
-        error_messages={
-            "required": "Ingresa tu nombre.",
-            "min_length": "El nombre es demasiado corto.",
-        },
-        widget=forms.TextInput(attrs={
-            "placeholder": "Tu nombre",
-            "autocomplete": "name",
-        })
-    )
-    email    = forms.EmailField(
-        label="Email",
-        error_messages={
-            "required": "Ingresa tu correo.",
-            "invalid":  "Escribe un correo válido.",
-        },
-        widget=forms.EmailInput(attrs={
-            "placeholder": "tunombre@email.com",
-            "autocomplete": "email",
-            "inputmode": "email",
-        })
-    )
-    whatsapp = forms.CharField(
-        label="WhatsApp (opcional)",
-        required=False,
-        min_length=8,
-        max_length=20,
-        widget=forms.TextInput(attrs={
-            "placeholder": "+56 9 1234 5678",
-            "inputmode": "tel",
-            "pattern": r"^[0-9+\s-]{8,20}$",
-        })
-    )
-    mascota  = forms.CharField(
-        label="Nombre de la mascota",
-        min_length=2,
-        max_length=80,
-        error_messages={"required": "Ingresa el nombre de tu mascota."},
-        widget=forms.TextInput(attrs={"placeholder": "Firulais"})
-    )
-    especie  = forms.ChoiceField(
-        label="Especie",
-        choices=[("Perro","Perro"),("Gato","Gato"),("Otro","Otro")],
-        error_messages={"required": "Selecciona la especie."},
-    )
+
 
 
 def reservar_exito(request, pk: int):

@@ -1,8 +1,10 @@
 {% extends "main/base.html" %}
 {% load static %}
-{% block contenido %}
+{% block extra_head %}
 <link rel="stylesheet" href="{% static 'agenda/css/styles.css' %}">
+{% endblock %}
 
+{% block contenido %}
 <main class="page">
   <header class="page-head">
     <h1>{{ titulo|default:"Cita" }}</h1>

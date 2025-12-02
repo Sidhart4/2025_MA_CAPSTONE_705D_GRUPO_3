@@ -232,4 +232,35 @@ contextBridge.exposeInMainWorld("api", {
     apiFetch("/api/mascotas/", { method: "POST", body: JSON.stringify(payload) }),
   updateMascota: (id, payload = {}) =>
     apiFetch(`/api/mascotas/${id}/`, { method: "PATCH", body: JSON.stringify(payload) }),
+
+  // ---------- Usuarios clientes ----------
+  getUsuariosClientes: (params = {}) => {
+    const q = new URLSearchParams(cleanParams(params)).toString();
+    return apiFetch(`/api/usuarios-clientes/${q ? "?" + q : ""}`);
+  },
+  createUsuarioCliente: (payload = {}) =>
+    apiFetch(`/api/usuarios-clientes/`, { method: "POST", body: JSON.stringify(payload) }),
+  updateUsuarioCliente: (id, payload = {}) =>
+    apiFetch(`/api/usuarios-clientes/${id}/`, { method: "PATCH", body: JSON.stringify(payload) }),
+
+  // ---------- Mascotas de usuario (perfil) ----------
+  getMascotasPerfil: (params = {}) => {
+    const q = new URLSearchParams(cleanParams(params)).toString();
+    return apiFetch(`/api/mascotas-perfil/${q ? "?" + q : ""}`);
+  },
+  createMascotaPerfil: (payload = {}) =>
+    apiFetch(`/api/mascotas-perfil/`, { method: "POST", body: JSON.stringify(payload) }),
+  updateMascotaPerfil: (id, payload = {}) =>
+    apiFetch(`/api/mascotas-perfil/${id}/`, { method: "PATCH", body: JSON.stringify(payload) }),
+
+  // ---------- Fichas clínicas ----------
+  getFichasClinicas: (params = {}) => {
+    const q = new URLSearchParams(cleanParams(params)).toString();
+    return apiFetch(`/api/fichas-clinicas/${q ? "?" + q : ""}`);
+  },
+  createFichaClinica: (payload = {}) =>
+    apiFetch(`/api/fichas-clinicas/`, { method: "POST", body: JSON.stringify(payload) }),
+  updateFichaClinica: (id, payload = {}) =>
+    apiFetch(`/api/fichas-clinicas/${id}/`, { method: "PATCH", body: JSON.stringify(payload) }),
+
 });

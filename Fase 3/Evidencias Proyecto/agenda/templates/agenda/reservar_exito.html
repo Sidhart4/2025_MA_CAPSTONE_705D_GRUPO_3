@@ -1,8 +1,11 @@
 {% extends "main/base.html" %}
 {% load static humanize %}
 
-{% block contenido %}
+{% block extra_head %}
 <link rel="stylesheet" href="{% static 'agenda/css/agenda.css' %}">
+{% endblock %}
+
+{% block contenido %}
 <main class="container" style="max-width:980px; padding:32px 0 64px">
   <section class="card" style="padding:20px">
     <header style="display:flex; align-items:center; gap:.75rem; margin-bottom:12px;">

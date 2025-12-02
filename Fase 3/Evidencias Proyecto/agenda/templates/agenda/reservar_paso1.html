@@ -1,9 +1,11 @@
 {% extends "main/base.html" %}
 {% load static humanize %}
 
-{% block contenido %}
+{% block extra_head %}
 <link rel="stylesheet" href="{% static 'agenda/css/reserva.css' %}">
+{% endblock %}
 
+{% block contenido %}
 <div class="page-reserva">
   <!-- HERO -->
   <section class="hero-agenda">

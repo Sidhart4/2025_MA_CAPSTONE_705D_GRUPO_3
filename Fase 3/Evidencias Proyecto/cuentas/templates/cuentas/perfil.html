@@ -1,10 +1,11 @@
 {% extends 'main/base.html' %}
 {% load static %}
 
-{% block contenido %}
-
+{% block extra_head %}
 <link rel="stylesheet" href="{% static 'cuentas/css/perfil.css' %}">
+{% endblock %}
 
+{% block contenido %}
 <main class="perfil-wrapper container">
   <section class="perfil-hero">
     <div>
@@ -30,10 +31,13 @@
     </div>
   </section>
 
+  {# Se mantienen solo mensajes críticos (error/important) #}
   {% if messages %}
   <div class="perfil-messages">
     {% for message in messages %}
-      <div class="alert {{ message.tags|default:'info' }}">{{ message }}</div>
+      {% if message.tags == "error" or message.tags == "critical" %}
+        <div class="alert {{ message.tags }}">{{ message }}</div>
+      {% endif %}
     {% endfor %}
   </div>
   {% endif %}
@@ -125,7 +129,7 @@
     <article class="card mascotas-list">
       <div class="section-head">
         <h2>Mis mascotas</h2>
-        <p>Sube una foto para tenerlas siempre presentes.</p>
+        <p>Visualiza tus mascotas y actualiza su foto o notas.</p>
       </div>
 
       {% if mascotas %}
@@ -139,39 +143,48 @@
               {% endif %}
               <div class="pet-info">
                 <strong>{{ mascota.nombre }}</strong>
-                <span>{{ mascota.get_especie_display }}{% if mascota.raza %} • {{ mascota.raza }}{% endif %}</span>
+                <span>{{ mascota.get_especie_display }}{% if mascota.raza %} · {{ mascota.raza }}{% endif %}</span>
                 {% if mascota.notas %}<p>{{ mascota.notas }}</p>{% endif %}
-                <form method="post" action="{% url 'cuentas:mascota_eliminar' mascota.pk %}">
+                <form method="post" enctype="multipart/form-data">
                   {% csrf_token %}
-                  <button type="submit" class="link danger">Eliminar</button>
+                  <input type="hidden" name="action" value="mascota_foto">
+                  <input type="hidden" name="pet_id" value="{{ mascota.pk }}">
+                  <label>Actualizar foto</label>
+                  <input type="file" name="foto" accept="image/*">
+                  <label>Notas</label>
+                  <textarea name="notas" rows="2" placeholder="Notas de la mascota">{{ mascota.notas }}</textarea>
+                  <button type="submit" class="btn-primary" style="margin-top:6px;">Guardar cambios</button>
                 </form>
               </div>
             </div>
           {% endfor %}
         </div>
       {% else %}
-        <p class="empty">Aún no agregas mascotas. Usa el formulario para comenzar.</p>
+        <p class="empty">Tu veterinario agregará tus mascotas al sistema.</p>
       {% endif %}
     </article>
+  </section>
 
-    <article class="card mascotas-form">
-      <h2>Agregar mascota</h2>
-      <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        <input type="hidden" name="action" value="mascota">
-        {% for field in mascota_form %}
-          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-          {{ field }}
-          {% if field.help_text %}
-            <small>{{ field.help_text }}</small>
-          {% endif %}
-          {% if field.errors %}
-            <small class="error">{{ field.errors|join:", " }}</small>
-          {% endif %}
+  <section class="card" style="margin-top:18px;">
+    <h2>Historial clínico</h2>
+    {% if fichas %}
+      <div class="pet-gallery">
+        {% for ficha in fichas %}
+        <div class="pet-card">
+          <div class="pet-info">
+            <strong>{{ ficha.mascota.nombre }} · {{ ficha.fecha|date:"d/m/Y" }}</strong>
+            <span>Profesional: {{ ficha.profesional.nombre|default:"-" }}</span>
+            <p><strong>Motivo:</strong> {{ ficha.motivo }}</p>
+            {% if ficha.diagnostico %}<p><strong>Diagnóstico:</strong> {{ ficha.diagnostico }}</p>{% endif %}
+            {% if ficha.tratamiento %}<p><strong>Tratamiento:</strong> {{ ficha.tratamiento }}</p>{% endif %}
+            {% if ficha.proximo_control %}<p><strong>Próximo control:</strong> {{ ficha.proximo_control|date:"d/m/Y" }}</p>{% endif %}
+          </div>
+        </div>
         {% endfor %}
-        <button type="submit" class="btn-primary">Guardar mascota</button>
-      </form>
-    </article>
+      </div>
+    {% else %}
+      <p class="empty">Aún no hay fichas asociadas a tu cuenta.</p>
+    {% endif %}
   </section>
 </main>
 

@@ -2,9 +2,11 @@
 {% load static %}
 {% now "Y-m-d" as today %}
 
-{% block contenido %}
+{% block extra_head %}
 <link rel="stylesheet" href="{% static 'agenda/css/agenda.css' %}">
+{% endblock %}
 
+{% block contenido %}
 <main class="page">
   <div class="page-head">
     <h1>Agenda</h1>

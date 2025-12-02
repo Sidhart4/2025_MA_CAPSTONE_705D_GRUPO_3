@@ -27,10 +27,22 @@ class CitaSerializer(serializers.ModelSerializer):
             "mascota",
             "cliente",
             "creado",
+            "nombre_cliente",
+            "email_contacto",
+            "whatsapp_contacto",
+            "recuerda_mail",
+            "recuerda_wa",
+            "recordatorio_mail_enviado",
+            "recordatorio_wa_enviado",
             # Extras legibles
             "servicio_nombre",
             "profesional_nombre",
             "cliente_nombre",
+        )
+        read_only_fields = (
+            "creado",
+            "recordatorio_mail_enviado",
+            "recordatorio_wa_enviado",
         )
 
     def get_servicio_nombre(self, obj):

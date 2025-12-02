@@ -123,3 +123,18 @@ class MascotaPerfilForm(forms.ModelForm):
                     "nombre", "Ya tienes una mascota registrada con ese nombre."
                 )
         return cleaned
+
+
+class MascotaFotoForm(forms.ModelForm):
+    class Meta:
+        model = MascotaPerfil
+        fields = ["foto", "notas"]
+        widgets = {
+            "notas": forms.Textarea(
+                attrs={
+                    "rows": 3,
+                    "placeholder": "Notas de la mascota",
+                    "class": "inpt",
+                }
+            ),
+        }

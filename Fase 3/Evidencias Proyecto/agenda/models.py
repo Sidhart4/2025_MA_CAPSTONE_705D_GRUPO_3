@@ -1,6 +1,8 @@
 # agenda/models.py
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
+import datetime as dt
 
 
 class Profesional(models.Model):
@@ -76,6 +78,13 @@ class Cita(models.Model):
     fecha = models.DateField()
     hora = models.TimeField()
     duracion_min = models.PositiveIntegerField(default=30)
+    nombre_cliente = models.CharField(max_length=120, blank=True, default="")
+    email_contacto = models.EmailField(blank=True, default="")
+    whatsapp_contacto = models.CharField(max_length=30, blank=True, default="")
+    recuerda_mail = models.BooleanField(default=True)
+    recuerda_wa = models.BooleanField(default=False)
+    recordatorio_mail_enviado = models.DateTimeField(null=True, blank=True)
+    recordatorio_wa_enviado = models.DateTimeField(null=True, blank=True)
 
     profesional = models.ForeignKey(
         Profesional, on_delete=models.CASCADE, related_name="citas"
@@ -105,6 +114,11 @@ class Cita(models.Model):
 
     def __str__(self):
         return f"{self.fecha} {self.hora} · {self.mascota} · {self.profesional}"
+
+    def inicio_datetime(self) -> dt.datetime:
+        """Fecha y hora combinadas en zona local."""
+        tz = timezone.get_current_timezone()
+        return timezone.make_aware(dt.datetime.combine(self.fecha, self.hora), tz)
 # app "agenda" o "core" (donde prefieras) — models.py
 from django.db import models
 

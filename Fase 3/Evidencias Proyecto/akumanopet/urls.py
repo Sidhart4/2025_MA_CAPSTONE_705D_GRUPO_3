@@ -25,6 +25,7 @@ urlpatterns = [
     path("productos/", include(("productos.urls", "productos"), namespace="productos")),
     path("ventas/",    include(("ventas.urls",    "ventas"),    namespace="ventas")),
     path("reserva/",   include(("reserva.urls",   "reserva"),   namespace="reserva")),
+    path("fichas/",    include(("fichas.urls",    "fichas"),    namespace="fichas")),
     path("api/", include("akumanopet.api_urls")),
     path("api-auth/", include("rest_framework.urls")),
     path('accounts/', include('allauth.urls')),

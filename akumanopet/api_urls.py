@@ -1,17 +1,17 @@
-from django.urls import path, include
+from django.urls import path, include, re_path  # <--- Agregamos re_path
+from django.conf import settings                # <--- Agregamos settings
+from django.views.static import serve           # <--- Agregamos serve
 from rest_framework.routers import DefaultRouter
 
 # Productos (ya lo tienes; import actual)
 from productos.api import ProductoViewSet
 
 # Nuevos:
-from clientes.api.api import ClienteViewSet
+from clientes.api.api import ClienteViewSet, PropietarioViewSet, MascotaViewSet
 from agenda.api import CitaViewSet
-from cuentas.api import UserViewSet, MeView
-from cuentas.api import ClienteUserViewSet, MascotaPerfilViewSet
+from cuentas.api import UserViewSet, MeView, ClienteUserViewSet, MascotaPerfilViewSet
 from fichas.api import FichaClinicaViewSet
 from ventas.api import VentaViewSet, CajaViewSet
-from clientes.api.api import PropietarioViewSet, MascotaViewSet
 
 router = DefaultRouter()
 router.register(r"productos", ProductoViewSet, basename="producto")
@@ -29,4 +29,13 @@ router.register(r"fichas-clinicas", FichaClinicaViewSet, basename="ficha-clinica
 urlpatterns = [
     path("", include(router.urls)),
     path("me/", MeView.as_view(), name="me"),
+]
+
+# --- BLOQUE MAGICO PARA LAS FOTOS ---
+# Esto fuerza a Django a servir los archivos de la carpeta media
+# Nota: Solo funcionará para fotos que existan físicamente en el servidor
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', serve, {
+        'document_root': settings.MEDIA_ROOT,
+    }),
 ]

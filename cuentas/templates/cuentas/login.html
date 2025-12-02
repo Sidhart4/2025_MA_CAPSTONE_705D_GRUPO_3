@@ -1,6 +1,6 @@
 {% extends 'main/base.html' %}
 {% load static %}
-{% load socialaccount %} {# <-- ESTA LÍNEA ES NUEVA IMPORTANTE #}
+{% load socialaccount %}
 
 {% block extra_head %}
 <link rel="stylesheet" href="{% static 'cuentas/css/login.css' %}">
@@ -8,7 +8,6 @@
 
 {% block contenido %}
 <main class="card" role="main" aria-labelledby="title">
-  <!-- Logo -->
   <img class="brand-mark" src="{% static 'cuentas/images/logo_transparente.png' %}" alt="Akuma no Pet">
 
   <h1 id="title">Iniciar sesión</h1>
@@ -34,7 +33,6 @@
       <p id="error" class="error" role="alert" aria-live="polite"></p>
     {% endif %}
 
-    <!-- Email -->
     <div class="field">
       <label for="id_username" class="label">Email</label>
       <div class="control">
@@ -48,7 +46,6 @@
       </div>
     </div>
 
-    <!-- Password -->
     <div class="field">
       <label for="id_password" class="label">Contraseña</label>
       <div class="control">
@@ -69,15 +66,12 @@
       </div>
     </div>
 
-    <!-- Remember -->
     <label class="remember">
       <input type="checkbox" name="remember" id="remember"> Recordarme
     </label>
 
-    <!-- Botón login normal -->
     <button type="submit" class="btn" id="btnLogin">Iniciar sesión</button>
 
-    <!-- Links secundarios -->
     <div class="forgot-group">
       <div class="forgot-actions">
         <button type="button" id="forgotToggle" class="link-button" aria-expanded="false">¿Olvidaste tu contraseña?</button>
@@ -114,19 +108,20 @@
       <span>O CONTINÚA CON</span>
       <span class="line"></span>
     </div>
+  </form> 
+  {# Cierro el form principal AQUÍ para no meter el form de Google dentro del otro #}
 
-    {# === BOTÓN GOOGLE (usa provider_login_url) === #}
-    <a
-      class="btn-google"
-      id="btnGoogle"
-      href="{% provider_login_url 'google' %}"
-    >
-      <img src="{% static 'icons/google.svg' %}" alt="" aria-hidden="true">
-      Continuar con Google
-    </a>
-
-    <p class="foot" style="margin-top:10px">Akuma no pet.</p>
+  {# === BOTÓN GOOGLE ARREGLADO (FORM POST) === #}
+  <form action="{% provider_login_url 'google' %}" method="post">
+      {% csrf_token %}
+      <button type="submit" class="btn-google" id="btnGoogle" style="width: 100%; cursor: pointer;">
+        <img src="{% static 'icons/google.svg' %}" alt="" aria-hidden="true">
+        Continuar con Google
+      </button>
   </form>
+
+  <p class="foot" style="margin-top:10px">Akuma no pet.</p>
+
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -161,6 +156,9 @@
 // Validación mínima en cliente
 (function () {
   const form   = document.getElementById('formLogin');
+  // Ojo: formLogin ahora solo maneja el login normal, no el de Google.
+  if(!form) return; 
+
   const email  = document.getElementById('id_username');
   const pass   = document.getElementById('id_password');
   const errorP = document.getElementById('error');

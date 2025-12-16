@@ -1,1 +1,1 @@
-web: gunicorn akumanopet.wsgi:application
+web: gunicorn akumanopet.wsgi
